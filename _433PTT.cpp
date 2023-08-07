@@ -62,3 +62,11 @@ bool _433PTT::cc1101Init(float _frequency , uint8_t _modulation , float _deviati
 
     return 1;
   }
+
+  void _433PTT::getRSSIcc1101(float freqSet, float freqStep){
+    for(uint8_t i=0; i < 128; i++){
+      ELECHOUSE_cc1101.setMHZ(freqSet);
+      scanDat[i] = ELECHOUSE_cc1101.getRssi();
+      freqSet += freqStep;
+    }
+  }

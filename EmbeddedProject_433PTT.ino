@@ -14,6 +14,7 @@ void setup() {
   } else {
       Serial.println(F("cc1101 connection error! check the wiring.\n\r"));
   };
+  ELECHOUSE_cc1101.SetRx();  // set Receive on
 
 }
 

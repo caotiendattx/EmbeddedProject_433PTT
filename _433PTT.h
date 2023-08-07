@@ -1,6 +1,8 @@
 #pragma once
 #include "Arduino.h"
 #include <ELECHOUSE_CC1101_SRC_DRV.h>
+//#include <RCSwitch.h>
+
 #include <stdint.h>
 
 
@@ -31,10 +33,11 @@ public:
   bool signalJamming();
   bool cc1101Init(float _frequency = 433.92, uint8_t _modulation = 2, float _deviation = 47.60, float _RXBW = 812.50, float _chsp = 199.95, float _DRate = 9.6);
   bool getConnectionStatus();
+  void getRSSIcc1101(float, float freqStep = 0.01);
 private:
   byte ccsendingbuffer[CCBUFFERSIZE] = {0};
-  static operaingRFFreq;
-
+  static float operaingRFFreq;
+  int8_t scanDat[128];
 
 };
 
