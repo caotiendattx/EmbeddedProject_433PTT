@@ -1,0 +1,7 @@
+filesystem uploader: https://randomnerdtutorials.com/install-esp32-filesystem-uploader-arduino-ide/
+AsynWebServer:
+	https://github.com/me-no-dev/ESPAsyncWebServer
+	https://randomnerdtutorials.com/esp32-web-server-spiffs-spi-flash-file-system/
+
+Arduino JSON:
+	https://microcontrollerslab.com/esp32-rest-api-web-server-get-post-postman/
