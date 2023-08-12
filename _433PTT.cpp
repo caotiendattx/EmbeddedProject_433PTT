@@ -134,9 +134,6 @@ void _433PTT::signalJamming(){
 }
 
 void _433PTT::getRSSIcc1101(float freqSet, float freqStep){
-  if(_state!=SCAN_STATE && _state!=RX_STATE){
-    _cc1101.SetRx();
-  }
   for(uint8_t i=0; i < 128; i++){
     _cc1101.setMHZ(freqSet);
     RSSIScanData[i] = _cc1101.getRssi();
@@ -163,18 +160,12 @@ bool _433PTT::ELECHOUSE_CC1101_DRIVER_RX(){
   {
     //Get received Data and calculate length
     int len = _cc1101.ReceiveData(ccreceivingbuffer);
-    // put NULL at the end of char buffer
     ccreceivingbuffer[len] = '\0';
     // flush textbuffer
     for (int i = 0; i < BUF_LENGTH; i++)
     { textbuffer[i] = 0; };
-    
-    //Print received packet as set of hex values directly 
-    // not to loose any data in buffer
-    // asciitohex((byte *)ccreceivingbuffer, (byte *)textbuffer,  len);
     asciitohex(ccreceivingbuffer, textbuffer,  len);
     // Serial.print((char *)textbuffer);
-    // set RX  mode again
     _cc1101.SetRx();
     return 1;
   }
@@ -182,15 +173,8 @@ bool _433PTT::ELECHOUSE_CC1101_DRIVER_RX(){
 }
 void _433PTT::ELECHOUSE_CC1101_DRIVER_TX(char* send_buffer){
   hextoascii(ccsendingbuffer,(byte *)send_buffer, strlen(send_buffer));  
-  ccsendingbuffer[strlen(send_buffer)/2] = 0x00;       
-  // Serial.print("\r\nTransmitting RF packets.\r\n");
-  // send these data to radio over CC1101
+  ccsendingbuffer[strlen(send_buffer)/2] = 0x00;
   _cc1101.SendData(ccsendingbuffer, (byte)(strlen(send_buffer)/2));
-  // for DEBUG only
-  // asciitohex(ccsendingbuffer, textbuffer,  strlen(cmdline)/2 );
-  // Serial.print(F("Sent frame: "));
-  // Serial.print((char *)textbuffer);
-  // Serial.print(F("\r\n")); }
 }
 bool _433PTT::ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag(){
   return _cc1101.CheckReceiveFlag();

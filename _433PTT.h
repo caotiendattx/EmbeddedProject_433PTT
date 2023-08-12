@@ -67,13 +67,15 @@ public:
   bool ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag();
   //ELECHOUSE Variables:
 
+  //Public Variables:
+  int8_t RSSIScanData[128];
 private:
   byte ccsendingbuffer[CCBUFFERSIZE] = {0};
   byte ccreceivingbuffer[CCBUFFERSIZE] = {0};
   // buffer for hex to ascii conversions 
   byte textbuffer[BUF_LENGTH];
   float operaingRFFreq;
-  int8_t RSSIScanData[128];
+
   ELECHOUSE_CC1101 _cc1101;
   RCSwitch mySwitch;
   _433PTT_STATE _state;

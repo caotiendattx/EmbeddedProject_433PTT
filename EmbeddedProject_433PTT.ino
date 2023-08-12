@@ -18,9 +18,6 @@ void setup() {
   };
   tool.init();
   tool.changeState(IDLE_STATE);
-  
-  char* send_buffer = "A123";
-  tool.ELECHOUSE_CC1101_DRIVER_TX(send_buffer);
 }
 
 void embedded_app(){
@@ -31,6 +28,7 @@ void embedded_app(){
     break;
     case TX_STATE:
       // char* send_buffer;
+      //  char* send_buffer = "A123";
       // tool.ELECHOUSE_CC1101_DRIVER_TX(send_buffer);
 
     break;
@@ -65,7 +63,11 @@ void embedded_app(){
 
     break;
     case SCAN_STATE:
-
+      float start_Frequency;
+      float increasement;
+      tool.getRSSIcc1101(start_Frequency, increasement);
+      //TODO: DATA TO FE
+      // tool.RSSIScanData[i];
     break;
     case JAMMING_STATE:
       tool.signalJamming();
@@ -77,5 +79,4 @@ void embedded_app(){
 }
 void loop() {
   embedded_app();
-
 }
