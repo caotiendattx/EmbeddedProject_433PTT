@@ -1,7 +1,7 @@
 #pragma once
 #include "Arduino.h"
-#include <ELECHOUSE_CC1101_SRC_DRV.h>
-//#include <RCSwitch.h>
+#include "cc1101_drv.h"
+#include "RCSwitch_.h"
 
 #include <stdint.h>
 
@@ -13,31 +13,60 @@
 #define ss 5          //  GPIO 5
 #define gdo0 2        //  GPIO 2
 #define gdo2 4        //  GPIO 4
+#define RCSwitchPin 4
 
 #define CCBUFFERSIZE 64
+enum _433PTT_STATE{
+  IDLE_STATE,
+  JAMMING_STATE,
+  TX_STATE,
+  RX_STATE,
+  SCAN_STATE,
+  CONFIG_STATE
+};
+enum _433PTT_DRIVER{
+  ELECHOUSE_CC1101_DRIVER,
+  RCSWITCH_DRIVER
 
-struct RFData{
-  char* name;
-  uint32_t signalInBinary;
 };
 
 class _433PTT
 {
 public:
   _433PTT();
-  RFData getSavedRF(const char* name);
-  bool saveRF(RFData _rf);
-  bool deteteSavedRF(RFData _rf);
-  bool sendRF(RFData);
-  bool readRF();
-  bool signalJamming();
-  bool cc1101Init(float _frequency = 433.92, uint8_t _modulation = 2, float _deviation = 47.60, float _RXBW = 812.50, float _chsp = 199.95, float _DRate = 9.6);
+  void init();
+  void signalJamming();
+  void receiveRF_RCSwitch();
+  bool cc1101Config(float , uint8_t , float , float , float , float );
   bool getConnectionStatus();
   void getRSSIcc1101(float, float freqStep = 0.01);
+  int getState();
+  void changeState(_433PTT_STATE );
+  int getDriver();
+  void changeDriver(_433PTT_DRIVER );
+  ///////////////////////////////////////////////////
+  void signalJamming(float);
+  void signalJamming(float, float);
+  void signalJamming(float, float, float);
+  //RCSWitch Variables:
+  unsigned long RCSwitch_Received_Value;
+  unsigned int RCSwitch_Received_Bitlength;
+  unsigned int RCSwitch_Received_Protocol;
+  int RCSwitch_RSSI;
+  ///////////////////////////////////////
+  //RCSwitch Funct
+  void mySwitch_ResetAvailable();
+  void mySwitch_SetRX();
+  bool mySwitch_available();
 private:
   byte ccsendingbuffer[CCBUFFERSIZE] = {0};
-  static float operaingRFFreq;
-  int8_t scanDat[128];
+  float operaingRFFreq;
+  int8_t RSSIScanData[128];
+  ELECHOUSE_CC1101 _cc1101;
+  RCSwitch mySwitch;
+  _433PTT_STATE _state;
+  _433PTT_DRIVER _driver;
+
 
 };
 
