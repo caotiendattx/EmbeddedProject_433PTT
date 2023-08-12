@@ -18,6 +18,9 @@ void setup() {
   };
   tool.init();
   tool.changeState(IDLE_STATE);
+  
+  char* send_buffer = "A123";
+  tool.ELECHOUSE_CC1101_DRIVER_TX(send_buffer);
 }
 
 void embedded_app(){
@@ -27,23 +30,37 @@ void embedded_app(){
 
     break;
     case TX_STATE:
+      // char* send_buffer;
+      // tool.ELECHOUSE_CC1101_DRIVER_TX(send_buffer);
 
     break;
     case RX_STATE:
       if(tool.getDriver()==RCSWITCH_DRIVER){
         if(tool.getState()!=SCAN_STATE && tool.getState()!=RX_STATE ){
-          tool.mySwitch_SetRX();
+          tool.RCSwitch_SetRX();
         }
 
-        if(tool.mySwitch_available()){
+        if(tool.RCSwitch_available()){
           tool.receiveRF_RCSwitch();
           //TODO: DATA TO FE
-          
-          tool.mySwitch_ResetAvailable();
+          // tool.RCSwitch_Received_Value
+          // tool.RCSwitch_Received_Bitlength
+          // tool.RCSwitch_Received_Protocol
+          // tool.RCSwitch_RSSI
         }
       }
       else if(tool.getDriver()==ELECHOUSE_CC1101_DRIVER){
-
+        
+        if(tool.getState()!=SCAN_STATE && tool.getState()!=RX_STATE ){
+          tool.ELECHOUSE_CC1101_SetRX();
+        }
+        
+        if(tool.ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag()){
+          tool.ELECHOUSE_CC1101_DRIVER_RX();
+          //TODO: DATA TO FE 
+          // tool.ccreceivingbuffer
+          // tool.textbuffer
+        }
       }
 
     break;

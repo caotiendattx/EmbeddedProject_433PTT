@@ -16,6 +16,8 @@
 #define RCSwitchPin 4
 
 #define CCBUFFERSIZE 64
+#define BUF_LENGTH 128             // Buffer for the incoming command.
+
 enum _433PTT_STATE{
   IDLE_STATE,
   JAMMING_STATE,
@@ -38,6 +40,7 @@ public:
   void signalJamming();
   void receiveRF_RCSwitch();
   bool cc1101Config(float , uint8_t , float , float , float , float );
+  void cc1101Config();
   bool getConnectionStatus();
   void getRSSIcc1101(float, float freqStep = 0.01);
   int getState();
@@ -55,11 +58,20 @@ public:
   int RCSwitch_RSSI;
   ///////////////////////////////////////
   //RCSwitch Funct
-  void mySwitch_ResetAvailable();
-  void mySwitch_SetRX();
-  bool mySwitch_available();
+  void RCSwitch_SetRX();
+  bool RCSwitch_available();
+  //ELECHOUSE Funct
+  bool ELECHOUSE_CC1101_DRIVER_RX();
+  void ELECHOUSE_CC1101_SetRX();
+  void ELECHOUSE_CC1101_DRIVER_TX(char*);
+  bool ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag();
+  //ELECHOUSE Variables:
+
 private:
   byte ccsendingbuffer[CCBUFFERSIZE] = {0};
+  byte ccreceivingbuffer[CCBUFFERSIZE] = {0};
+  // buffer for hex to ascii conversions 
+  byte textbuffer[BUF_LENGTH];
   float operaingRFFreq;
   int8_t RSSIScanData[128];
   ELECHOUSE_CC1101 _cc1101;
