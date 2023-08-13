@@ -117,19 +117,15 @@ public:
   RF_Specs _RFSpecs;
   //Public Variables:
   int8_t RSSIScanData[128];
-private:
   byte ccsendingbuffer[CCBUFFERSIZE] = {0};
   byte ccreceivingbuffer[CCBUFFERSIZE] = {0};
   // buffer for hex to ascii conversions 
   byte textbuffer[BUF_LENGTH];
-
-
+private:
   ELECHOUSE_CC1101 _cc1101;
   RCSwitch mySwitch;
   _433PTT_STATE _state;
   _433PTT_DRIVER _driver;
-
-
 };
 
 

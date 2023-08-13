@@ -20,6 +20,42 @@ void setup() {
   tool.changeState(IDLE_STATE);
 }
 
+void handle_RX_State(){
+  if(tool.getDriver()==RCSWITCH_DRIVER){
+    if(tool.getState()!=SCAN_STATE && tool.getState()!=RX_STATE ){
+      tool.RCSwitch_SetRX();
+    }
+
+    if(tool.RCSwitch_available()){
+      tool.receiveRF_RCSwitch();
+      //TODO: DATA TO FE
+      // tool.RCSwitch_Received_Value
+      // tool.RCSwitch_Received_Bitlength
+      // tool.RCSwitch_Received_Protocol
+      // tool.RCSwitch_RSSI
+    }
+  }
+  else if(tool.getDriver()==ELECHOUSE_CC1101_DRIVER){
+    
+    if(tool.getState()!=SCAN_STATE && tool.getState()!=RX_STATE ){
+      tool.ELECHOUSE_CC1101_SetRX();
+    }
+    
+    if(tool.ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag()){
+      tool.ELECHOUSE_CC1101_DRIVER_RX();
+      //TODO: DATA TO FE 
+      // tool.ccreceivingbuffer
+      // tool.textbuffer
+    }
+  }
+}
+void handle_Scan_State(){
+  float start_Frequency;
+  float increasement;
+  tool.getRSSIcc1101(start_Frequency, increasement);
+  //TODO: DATA TO FE
+  // tool.RSSIScanData[i];
+}
 void embedded_app(){
 
     switch(tool.getState()){
@@ -33,41 +69,11 @@ void embedded_app(){
 
     break;
     case RX_STATE:
-      if(tool.getDriver()==RCSWITCH_DRIVER){
-        if(tool.getState()!=SCAN_STATE && tool.getState()!=RX_STATE ){
-          tool.RCSwitch_SetRX();
-        }
-
-        if(tool.RCSwitch_available()){
-          tool.receiveRF_RCSwitch();
-          //TODO: DATA TO FE
-          // tool.RCSwitch_Received_Value
-          // tool.RCSwitch_Received_Bitlength
-          // tool.RCSwitch_Received_Protocol
-          // tool.RCSwitch_RSSI
-        }
-      }
-      else if(tool.getDriver()==ELECHOUSE_CC1101_DRIVER){
-        
-        if(tool.getState()!=SCAN_STATE && tool.getState()!=RX_STATE ){
-          tool.ELECHOUSE_CC1101_SetRX();
-        }
-        
-        if(tool.ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag()){
-          tool.ELECHOUSE_CC1101_DRIVER_RX();
-          //TODO: DATA TO FE 
-          // tool.ccreceivingbuffer
-          // tool.textbuffer
-        }
-      }
+      handle_RX_State();
 
     break;
     case SCAN_STATE:
-      float start_Frequency;
-      float increasement;
-      tool.getRSSIcc1101(start_Frequency, increasement);
-      //TODO: DATA TO FE
-      // tool.RSSIScanData[i];
+      handle_Scan_State();
     break;
     case JAMMING_STATE:
       tool.signalJamming();
@@ -75,7 +81,6 @@ void embedded_app(){
     default:
     break;
   }
-
 }
 void loop() {
   embedded_app();
