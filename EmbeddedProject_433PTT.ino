@@ -54,13 +54,14 @@ void handle_Scan_State(){
   float increasement;
   tool.getRSSIcc1101(start_Frequency, increasement);
   //TODO: DATA TO FE
-  // tool.RSSIScanData[i];
+  // tool.RSSIScanData[i]; 
 }
-void embedded_app(){
 
-    switch(tool.getState()){
+
+
+void loop() {
+  switch(tool.getState()){
     case IDLE_STATE:
-
     break;
     case TX_STATE:
       // char* send_buffer;
@@ -70,7 +71,6 @@ void embedded_app(){
     break;
     case RX_STATE:
       handle_RX_State();
-
     break;
     case SCAN_STATE:
       handle_Scan_State();
@@ -81,7 +81,4 @@ void embedded_app(){
     default:
     break;
   }
-}
-void loop() {
-  embedded_app();
 }
