@@ -1,38 +1,60 @@
 #include "_433PTT.h"
-  void _433PTT::cc1101Config(){
-        // initializing library with custom pins selected
-     _cc1101.setSpiPin(sck, miso, mosi, ss);
-     _cc1101.setGDO(gdo0, gdo2);
-
-    // Main part to tune CC1101 with proper frequency, modulation and encoding    
-    _cc1101.Init();                // must be set to initialize the cc1101!
-    _cc1101.setGDO0(gdo0);         // set lib internal gdo pin (gdo0). Gdo2 not use for this example.
-    _cc1101.setCCMode(1);          // set config for internal transmission mode. value 0 is for RAW recording/replaying
-    _cc1101.setModulation(2);      // set modulation mode. 0 = 2-FSK, 1 = GFSK, 2 = ASK/OOK, 3 = 4-FSK, 4 = MSK.
-    _cc1101.setMHZ(433.92);        // Here you can set your basic frequency. The lib calculates the frequency automatically (default = 433.92).The cc1101 can: 300-348 MHZ, 387-464MHZ and 779-928MHZ. Read More info from datasheet.
-    _cc1101.setDeviation(47.60);   // Set the Frequency deviation in kHz. Value from 1.58 to 380.85. Default is 47.60 kHz.
-    _cc1101.setChannel(0);         // Set the Channelnumber from 0 to 255. Default is cahnnel 0.
-    _cc1101.setChsp(199.95);       // The channel spacing is multiplied by the channel number CHAN and added to the base frequency in kHz. Value from 25.39 to 405.45. Default is 199.95 kHz.
-    _cc1101.setRxBW(812.50);       // Set the Receive Bandwidth in kHz. Value from 58.03 to 812.50. Default is 812.50 kHz.
-    _cc1101.setDRate(9.6);         // Set the Data Rate in kBaud. Value from 0.02 to 1621.83. Default is 99.97 kBaud!
-    _cc1101.setPA(10);             // Set TxPower. The following settings are possible depending on the frequency band.  (-30  -20  -15  -10  -6    0    5    7    10   11   12) Default is max!
-    _cc1101.setSyncMode(2);        // Combined sync-word qualifier mode. 0 = No preamble/sync. 1 = 16 sync word bits detected. 2 = 16/16 sync word bits detected. 3 = 30/32 sync word bits detected. 4 = No preamble/sync, carrier-sense above threshold. 5 = 15/16 + carrier-sense above threshold. 6 = 16/16 + carrier-sense above threshold. 7 = 30/32 + carrier-sense above threshold.
-    _cc1101.setSyncWord(211, 145); // Set sync word. Must be the same for the transmitter and receiver. Default is 211,145 (Syncword high, Syncword low)
-    _cc1101.setAdrChk(0);          // Controls address check configuration of received packages. 0 = No address check. 1 = Address check, no broadcast. 2 = Address check and 0 (0x00) broadcast. 3 = Address check and 0 (0x00) and 255 (0xFF) broadcast.
-    _cc1101.setAddr(0);            // Address used for packet filtration. Optional broadcast addresses are 0 (0x00) and 255 (0xFF).
-    _cc1101.setWhiteData(0);       // Turn data whitening on / off. 0 = Whitening off. 1 = Whitening on.
-    _cc1101.setPktFormat(0);       // Format of RX and TX data. 0 = Normal mode, use FIFOs for RX and TX. 1 = Synchronous serial mode, Data in on GDO0 and data out on either of the GDOx pins. 2 = Random TX mode; sends random data using PN9 generator. Used for test. Works as normal mode, setting 0 (00), in RX. 3 = Asynchronous serial mode, Data in on GDO0 and data out on either of the GDOx pins.
-    _cc1101.setLengthConfig(1);    // 0 = Fixed packet length mode. 1 = Variable packet length mode. 2 = Infinite packet length mode. 3 = Reserved
-    _cc1101.setPacketLength(0);    // Indicates the packet length when fixed packet length mode is enabled. If variable packet length mode is used, this value indicates the maximum packet length allowed.
-    _cc1101.setCrc(0);             // 1 = CRC calculation in TX and CRC check in RX enabled. 0 = CRC disabled for TX and RX.
-    _cc1101.setCRC_AF(0);          // Enable automatic flush of RX FIFO when CRC is not OK. This requires that only one packet is in the RXIFIFO and that packet length is limited to the RX FIFO size.
-    _cc1101.setDcFilterOff(0);     // Disable digital DC blocking filter before demodulator. Only for data rates ≤ 250 kBaud The recommended IF frequency changes when the DC blocking is disabled. 1 = Disable (current optimized). 0 = Enable (better sensitivity).
-    _cc1101.setManchester(0);      // Enables Manchester encoding/decoding. 0 = Disable. 1 = Enable.
-    _cc1101.setFEC(0);             // Enable Forward Error Correction (FEC) with interleaving for packet payload (Only supported for fixed packet length mode. 0 = Disable. 1 = Enable.
-    _cc1101.setPRE(0);             // Sets the minimum number of preamble bytes to be transmitted. Values: 0 : 2, 1 : 3, 2 : 4, 3 : 6, 4 : 8, 5 : 12, 6 : 16, 7 : 24
-    _cc1101.setPQT(0);             // Preamble quality estimator threshold. The preamble quality estimator increases an internal counter by one each time a bit is received that is different from the previous bit, and decreases the counter by 8 each time a bit is received that is the same as the last bit. A threshold of 4∙PQT for this counter is used to gate sync word detection. When PQT=0 a sync word is always accepted.
-    _cc1101.setAppendStatus(0);    // When enabled, two status bytes will be appended to the payload of the packet. The status bytes contain RSSI and LQI values, as well as CRC OK.
-  }
+void _433PTT::cc1101Config(){
+  _RFSpecs.CCMode = 1;
+  _RFSpecs.modulation = ASK_OOK;
+  operatingRFFreq = 433.92;
+  _RFSpecs.deviation = 47.60;
+  _RFSpecs.channel = 0;
+  _RFSpecs.Chsp = 199.95;
+  _RFSpecs.RxBW = 812.5;
+  _RFSpecs.DRate = 9.6;
+  _RFSpecs.TXPower = PLUS_10;
+  _RFSpecs.syncMode = 2;
+  _RFSpecs.syncWord_1 = 211;
+  _RFSpecs.syncWord_2 = 145;
+  _RFSpecs.adrChk = 0;
+  _RFSpecs.addr = 0;
+  _RFSpecs.whitening = 0;
+  _RFSpecs.pktFormat = 0;
+  _RFSpecs.lengthConfig = 1;
+  _RFSpecs.pktLength = 0;
+  _RFSpecs.crc  = 0;
+  _RFSpecs.crcAF = 0;
+  _RFSpecs.DCFilter = 0;
+  _RFSpecs.manchester = 0;
+  _RFSpecs.FEC = 0;
+  _RFSpecs.PRE = 0;
+  _RFSpecs.PQT = 0;
+  _RFSpecs.appendStatus = 0;
+  cc1101UpdateConfig();
+}
+void _433PTT::cc1101UpdateConfig(){
+  _cc1101.setCCMode(_RFSpecs.CCMode);          // set config for internal transmission mode. value 0 is for RAW recording/replaying
+  _cc1101.setModulation(_RFSpecs.modulation);      // set modulation mode. 0 = 2-FSK, 1 = GFSK, 2 = ASK/OOK, 3 = 4-FSK, 4 = MSK.
+  _cc1101.setMHZ(operatingRFFreq);        // Here you can set your basic frequency. The lib calculates the frequency automatically (default = 433.92).The cc1101 can: 300-348 MHZ, 387-464MHZ and 779-928MHZ. Read More info from datasheet.
+  _cc1101.setDeviation(_RFSpecs.deviation);   // Set the Frequency deviation in kHz. Value from 1.58 to 380.85. Default is 47.60 kHz.
+  _cc1101.setChannel(_RFSpecs.channel);         // Set the Channelnumber from 0 to 255. Default is cahnnel 0.
+  _cc1101.setChsp(_RFSpecs.Chsp);       // The channel spacing is multiplied by the channel number CHAN and added to the base frequency in kHz. Value from 25.39 to 405.45. Default is 199.95 kHz.
+  _cc1101.setRxBW(_RFSpecs.RxBW);       // Set the Receive Bandwidth in kHz. Value from 58.03 to 812.50. Default is 812.50 kHz.
+  _cc1101.setDRate(_RFSpecs.DRate);         // Set the Data Rate in kBaud. Value from 0.02 to 1621.83. Default is 99.97 kBaud!
+  _cc1101.setPA(_RFSpecs.TXPower);             // Set TxPower. The following settings are possible depending on the frequency band.  (-30  -20  -15  -10  -6    0    5    7    10   11   12) Default is max!
+  _cc1101.setSyncMode(_RFSpecs.syncMode);        // Combined sync-word qualifier mode. 0 = No preamble/sync. 1 = 16 sync word bits detected. 2 = 16/16 sync word bits detected. 3 = 30/32 sync word bits detected. 4 = No preamble/sync, carrier-sense above threshold. 5 = 15/16 + carrier-sense above threshold. 6 = 16/16 + carrier-sense above threshold. 7 = 30/32 + carrier-sense above threshold.
+  _cc1101.setSyncWord(_RFSpecs.syncWord_1, _RFSpecs.syncWord_2); // Set sync word. Must be the same for the transmitter and receiver. Default is 211,145 (Syncword high, Syncword low)
+  _cc1101.setAdrChk(_RFSpecs.adrChk);          // Controls address check configuration of received packages. 0 = No address check. 1 = Address check, no broadcast. 2 = Address check and 0 (0x00) broadcast. 3 = Address check and 0 (0x00) and 255 (0xFF) broadcast.
+  _cc1101.setAddr(_RFSpecs.addr);            // Address used for packet filtration. Optional broadcast addresses are 0 (0x00) and 255 (0xFF).
+  _cc1101.setWhiteData(_RFSpecs.whitening);       // Turn data whitening on / off. 0 = Whitening off. 1 = Whitening on.
+  _cc1101.setPktFormat(_RFSpecs.pktFormat);       // Format of RX and TX data. 0 = Normal mode, use FIFOs for RX and TX. 1 = Synchronous serial mode, Data in on GDO0 and data out on either of the GDOx pins. 2 = Random TX mode; sends random data using PN9 generator. Used for test. Works as normal mode, setting 0 (00), in RX. 3 = Asynchronous serial mode, Data in on GDO0 and data out on either of the GDOx pins.
+  _cc1101.setLengthConfig(_RFSpecs.lengthConfig);    // 0 = Fixed packet length mode. 1 = Variable packet length mode. 2 = Infinite packet length mode. 3 = Reserved
+  _cc1101.setPacketLength(_RFSpecs.pktLength);    // Indicates the packet length when fixed packet length mode is enabled. If variable packet length mode is used, this value indicates the maximum packet length allowed.
+  _cc1101.setCrc(_RFSpecs.crc);             // 1 = CRC calculation in TX and CRC check in RX enabled. 0 = CRC disabled for TX and RX.
+  _cc1101.setCRC_AF(_RFSpecs.crcAF);          // Enable automatic flush of RX FIFO when CRC is not OK. This requires that only one packet is in the RXIFIFO and that packet length is limited to the RX FIFO size.
+  _cc1101.setDcFilterOff(_RFSpecs.DCFilter);     // Disable digital DC blocking filter before demodulator. Only for data rates ≤ 250 kBaud The recommended IF frequency changes when the DC blocking is disabled. 1 = Disable (current optimized). 0 = Enable (better sensitivity).
+  _cc1101.setManchester(_RFSpecs.manchester);      // Enables Manchester encoding/decoding. 0 = Disable. 1 = Enable.
+  _cc1101.setFEC(_RFSpecs.FEC);             // Enable Forward Error Correction (FEC) with interleaving for packet payload (Only supported for fixed packet length mode. 0 = Disable. 1 = Enable.
+  _cc1101.setPRE(_RFSpecs.PRE);             // Sets the minimum number of preamble bytes to be transmitted. Values: 0 : 2, 1 : 3, 2 : 4, 3 : 6, 4 : 8, 5 : 12, 6 : 16, 7 : 24
+  _cc1101.setPQT(_RFSpecs.PQT);             // Preamble quality estimator threshold. The preamble quality estimator increases an internal counter by one each time a bit is received that is different from the previous bit, and decreases the counter by 8 each time a bit is received that is the same as the last bit. A threshold of 4∙PQT for this counter is used to gate sync word detection. When PQT=0 a sync word is always accepted.
+  _cc1101.setAppendStatus(_RFSpecs.appendStatus);    // When enabled, two status bytes will be appended to the payload of the packet. The status bytes contain RSSI and LQI values, as well as CRC OK.
+}
 ///////////////////////////////////////////////
 // convert bytes in table to string with hex numbers
 void asciitohex(byte *ascii_ptr, byte *hex_ptr,int len)

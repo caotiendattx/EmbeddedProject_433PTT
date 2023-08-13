@@ -31,7 +31,53 @@ enum _433PTT_DRIVER{
   RCSWITCH_DRIVER
 
 };
-
+enum _433PTT_MODULATIONS{
+  _2_FSK = 0,
+  GFSK,
+  ASK_OOK,
+  _4_FSK,
+  MSK
+};
+enum TX_POWER {
+    MINUS_30 = -30,
+    MINUS_20 = -20,
+    MINUS_15 = -15,
+    MINUS_10 = -10,
+    MINUS_6 = -6,
+    ZERO = 0,
+    PLUS_5 = 5,
+    PLUS_7 = 7,
+    PLUS_10 = 10,
+    PLUS_11 = 11,
+    PLUS_12 = 12
+};
+struct RF_Specs{
+  bool CCMode;
+  _433PTT_MODULATIONS modulation;
+  float deviation;
+  uint8_t channel;
+  float Chsp;
+  float RxBW;
+  float DRate;
+  TX_POWER TXPower;
+  uint8_t syncMode;
+  uint32_t syncWord_1;
+  uint32_t syncWord_2;
+  uint8_t adrChk;
+  uint8_t addr;
+  bool whitening;
+  uint8_t pktFormat;
+  uint8_t lengthConfig;
+  uint8_t pktLength;
+  uint8_t crcAF;
+  bool crc;
+  bool DCFilter;
+  bool manchester;
+  bool FEC;
+  uint8_t PRE;
+  uint8_t PQT;
+  bool appendStatus;
+};
 class _433PTT
 {
 public:
@@ -41,6 +87,7 @@ public:
   void receiveRF_RCSwitch();
   bool cc1101Config(float , uint8_t , float , float , float , float );
   void cc1101Config();
+  void cc1101UpdateConfig();
   bool getConnectionStatus();
   void getRSSIcc1101(float, float freqStep = 0.01);
   int getState();
@@ -66,7 +113,8 @@ public:
   void ELECHOUSE_CC1101_DRIVER_TX(char*);
   bool ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag();
   //ELECHOUSE Variables:
-
+  float operatingRFFreq;
+  RF_Specs _RFSpecs;
   //Public Variables:
   int8_t RSSIScanData[128];
 private:
@@ -74,7 +122,7 @@ private:
   byte ccreceivingbuffer[CCBUFFERSIZE] = {0};
   // buffer for hex to ascii conversions 
   byte textbuffer[BUF_LENGTH];
-  float operaingRFFreq;
+
 
   ELECHOUSE_CC1101 _cc1101;
   RCSwitch mySwitch;
