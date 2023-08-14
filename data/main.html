@@ -654,74 +654,45 @@
               <div class="content-header-right"></div>
             </div>
             <div class="content-body">
-              <div class="form-group">
-                <label class="form-label" for="radioOn">On</label>
-                <input
-                  type="radio"
-                  id="radioOn"
-                  name="radioOption"
-                  value="on"
-                />
-                <label class="form-label" for="radioOff">Off</label>
-                <input
-                  type="radio"
-                  id="radioOff"
-                  name="radioOption"
-                  value="off"
-                />
-                <input type="text" id="textInput" placeholder="Enter text" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="radioOn">On</label>
-                <input
-                  type="radio"
-                  id="radioOn"
-                  name="radioOption"
-                  value="on"
-                />
-                <label class="form-label" for="radioOff">Off</label>
-                <input
-                  type="radio"
-                  id="radioOff"
-                  name="radioOption"
-                  value="off"
-                />
-                <input type="text" id="textInput" placeholder="Enter text" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="radioOn">On</label>
-                <input
-                  type="radio"
-                  id="radioOn"
-                  name="radioOption"
-                  value="on"
-                />
-                <label class="form-label" for="radioOff">Off</label>
-                <input
-                  type="radio"
-                  id="radioOff"
-                  name="radioOption"
-                  value="off"
-                />
-                <input type="text" id="textInput" placeholder="Enter text" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="radioOn">On</label>
-                <input
-                  type="radio"
-                  id="radioOn"
-                  name="radioOption"
-                  value="on"
-                />
-                <label class="form-label" for="radioOff">Off</label>
-                <input
-                  type="radio"
-                  id="radioOff"
-                  name="radioOption"
-                  value="off"
-                />
-                <input type="text" id="textInput" placeholder="Enter text" />
-              </div>
+               <form action="your_script_to_handle_form_data.php" method="post">
+                  <label for="frequencyCount">Select Number of Frequencies:</label>
+                  <select id="frequencyCount" name="frequencyCount">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select><br />
+                
+                  <!-- Frequency input fields will be dynamically added using JavaScript based on the selected frequency count -->
+                  <div id="frequencyInputs">
+                    <!-- Input fields will be added here -->
+                  </div>
+                
+                  <button type="submit">Submit</button>
+                </form>
+                
+                <script>
+                  const frequencyCountSelect = document.getElementById("frequencyCount");
+                  const frequencyInputsContainer = document.getElementById("frequencyInputs");
+                
+                  // Function to create input fields based on selected frequency count
+                  frequencyCountSelect.addEventListener("change", function() {
+                    const frequencyCount = parseInt(frequencyCountSelect.value);
+                    frequencyInputsContainer.innerHTML = ""; // Clear existing input fields
+                
+                    for (let i = 1; i <= frequencyCount; i++) {
+                      const inputField = document.createElement("input");
+                      inputField.type = "text";
+                      inputField.name = "frequency" + i;
+                      inputField.placeholder = "Enter Frequency " + i;
+                      inputField.required = true;
+                      frequencyInputsContainer.appendChild(inputField);
+                    }
+                  });
+                
+                  // Initialize with default value
+                  frequencyCountSelect.dispatchEvent(new Event("change"));
+                </script>
             </div>
           </div>
         </div>
