@@ -5,7 +5,7 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Pentesting Tools</title>
+   <title>433PTT</title>
    <link rel="stylesheet" type="text/css" href="styles.css">
 
 </head>
@@ -13,46 +13,81 @@
 <body>
    <nav>
       <ul>
-         <li data-target="viewRF"><a class="active" href="#viewRF">View RF</a></li>
-         <li data-target="sendRF"><a href="#sendRF">Send RF</a></li>
-         <li data-target="jamming"><a href="#jamming">Jamming</a></li>
-         <li data-target="signal"><a href="#signal">Signal</a></li>
+         <li data-target="scanRF"><a class="active" href="#scanRF">SCAN</a></li>
+         <li data-target="sendRF"><a href="#sendRF">TX</a></li>
+         <li data-target="jamming"><a href="#jamming">RX</a></li>
+         <li data-target="signal"><a href="#signal">JAMMING</a></li>
       </ul>
    </nav>
-   <section id="viewRF" class="active">
+   <section id="scanRF" class="active">
       <div class="section-container">
          <div class="main-display">
             <div class="main-content">
                <div class="content-header">
-                  <div class="content-header-left">
-                     <div class="slot-content">
-                        Cao Tien Dat
-                     </div>
-                     <div class="dropdown">
-                        <span>M</span>
-                        <div class="dropdown-content">
-                           <p>Hello World!</p>
-                        </div>
-                        <div class="dropdown-content">
-                           <p>Hello World!</p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="content-header-right">
-                     20.02dB
-                  </div>
                </div>
                <div class="content-body">
-                  <textarea name="" id="" cols="95%" rows="15%"></textarea>
-               </div>
-               <div class="bit-container">
-                  <p class="bit-content">010101010100101010101010010</p>
+                  <div class="rf-display">
+                     <canvas id="graphCanvas" width="400" height="200"></canvas>
+
+                     <script>  
+                       const canvas = document.getElementById('graphCanvas');
+                       const ctx = canvas.getContext('2d');
+                       const data = [91, 68, 5, 34, 15, 47, 58, 3, 56, 122,
+                                    73, 48, 105, 20, 69, 8, 100, 16, 65, 92,
+                                    79, 25, 54, 82, 44, 4, 95, 99, 13, 52,
+                                    26, 74, 63, 98, 1, 66, 113, 86, 40, 9,
+                                    116, 21, 117, 97, 19, 36, 83, 81, 39, 89,
+                                    77, 64, 124, 51, 29, 94, 123, 60, 112, 18,
+                                    127, 24, 71, 43, 59, 101, 53, 10, 76, 61,
+                                    31, 50, 88, 67, 38, 75, 96, 6, 85, 84,
+                                    110, 28, 32, 106, 102, 35, 45, 107, 78, 22,
+                                    11, 72, 30, 41, 70, 114, 37, 109, 115, 33,
+                                    49, 80, 42, 121, 93, 117, 111, 119, 87, 126,
+                                    46, 55, 62, 120, 14, 117, 90, 103, 27, 117
+
+                       ];
+                   
+                       const barCount = data.length;
+                       const barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
+                       const maxValue = Math.max(...data);
+                   
+                       ctx.clearRect(0, 0, canvas.width, canvas.height);
+                   
+                       for (let i = 0; i < barCount; i++) {
+                         const barHeight = (data[i] / maxValue) * canvas.height;
+                         const x = i * (barWidth * 2); // Adjust the position based on barWidth
+                         const y = canvas.height - barHeight;
+                   
+                         ctx.fillStyle = 'blue';
+                         ctx.fillRect(x, y, barWidth, barHeight);
+                       }
+                     </script>
+                     
+                  </div>
+                  <div class="rf-config">
+                     <form action="">
+                        <input type="radio" id="2-fsk" name="modulation" value="HTML">
+                        <label for="html">2-FSK</label><br>
+                        <input type="radio" id="gfsk" name="modulation" value="CSS">
+                        <label for="css">GFSK</label><br>
+                        <input type="radio" id="ask-ook" name="modulation" value="JavaScript">
+                        <label for="javascript">ASK/OOK</label>
+                        <input type="radio" id="4-fsk" name="modulation" value="JavaScript">
+                        <label for="javascript">4-FSK</label>
+                        <input type="radio" id="msk" name="modulation" value="JavaScript">
+                        <label for="javascript">MSK</label>
+                        <label for="start-freq">Start Frequency:</label><br>
+                        <input type="text" id="start-freq" name="start-freq" value="315MHz"><br>
+                        <label for="freq-step">Step:</label><br>
+                        <input type="text" id="freq-step" name="freq-step" value="0.01"><br><br>
+                        <input type="submit" value="Submit">
+                      </form>
+                  </div>
                </div>
             </div>
          </div>
          <div class="btn-container">
-            <button class="btn" id="btnViewRF">Execute</button>
-            <button class="btn">Next</button>
+            <button class="btn" id="btnscanRF">SCAN</button>
          </div>
       </div>
    </section>
