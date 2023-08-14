@@ -1,251 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>433PTT</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
 
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>433PTT</title>
-   <link rel="stylesheet" type="text/css" href="styles.css">
-
-</head>
-
-<body>
-   <nav>
+  <body>
+    <nav>
       <ul>
-         <li data-target="scanRF"><a class="active" href="#scanRF">SCAN</a></li>
-         <li data-target="tx"><a href="#tx">TX</a></li>
-         <li data-target="rx"><a href="#rx">RX</a></li>
-         <li data-target="jamming"><a href="#jamming">JAMMING</a></li>
+        <li data-target="scanRF"><a class="active" href="#scanRF">SCAN</a></li>
+        <li data-target="tx"><a href="#tx">TX</a></li>
+        <li data-target="rx"><a href="#rx">RX</a></li>
+        <li data-target="jamming"><a href="#jamming">JAMMING</a></li>
       </ul>
-   </nav>
-   <section id="scanRF" class="active">
+    </nav>
+    <section id="scanRF" class="active">
       <div class="section-container">
-         <div class="main-display">
-            <div class="main-content">
-               <div class="content-header">
-               </div>
-               <div class="content-body">
-                  <div class="rf-display">
-                     <canvas id="graphCanvas" width="400" height="200"></canvas>
+        <div class="main-display">
+          <div class="main-content">
+            <div class="content-body">
+              <div class="rf-display">
+                <div class="rf-spectrum">
+                  <canvas id="graphCanvas" width="400" height="200"></canvas>
+                  <br />
+                  <div id="numberContainer"></div>
 
-                     <script>  
-                       const canvas = document.getElementById('graphCanvas');
-                       const ctx = canvas.getContext('2d');
-                       const data = [91, 68, 5, 34, 15, 47, 58, 3, 56, 122,
-                                    73, 48, 105, 20, 69, 8, 100, 16, 65, 92,
-                                    79, 25, 54, 82, 44, 4, 95, 99, 13, 52,
-                                    26, 74, 63, 98, 1, 66, 113, 86, 40, 9,
-                                    116, 21, 117, 97, 19, 36, 83, 81, 39, 89,
-                                    77, 64, 124, 51, 29, 94, 123, 60, 112, 18,
-                                    127, 24, 71, 43, 59, 101, 53, 10, 76, 61,
-                                    31, 50, 88, 67, 38, 75, 96, 6, 85, 84,
-                                    110, 28, 32, 106, 102, 35, 45, 107, 78, 22,
-                                    11, 72, 30, 41, 70, 114, 37, 109, 115, 33,
-                                    49, 80, 42, 121, 93, 117, 111, 119, 87, 126,
-                                    46, 55, 62, 120, 14, 117, 90, 103, 27, 117
+                  <script>
+                    const canvas = document.getElementById("graphCanvas");
+                    const ctx = canvas.getContext("2d");
+                    const data = [
+                      -20, 138, -60, -92, 82, 210, 208, 125, 145, 240, -55, 250,
+                      112, 20, 65, 72, -80, 170, 102, 185, 235, -15, -78, 158,
+                      100, 175, 40, -35, 88, 48, 45, -25, 195, 220, 115, 38,
+                      112, 198, 82, 232, 62, -8, -45, 40, 52, -85, 120, 28, -92,
+                      55, 72, 70, 232, 145, 160, 108, 78, 128, 200, -50, -40,
+                      165, 115, 85, 175, 155, 230, 68, 250, 195, 32, 20, 78, -6,
+                      240, -18, 58, 82, 165, 112, -80, 72, -20, -12, 62, -55,
+                      90, 52, 145, 48, 112, 178, 160, 185, 220, -15, 102, 125,
+                      -85, 20, 70, 232, 235, 45, -92, 88, 82, -78, 142, -60,
+                      115, 198, 100, 170, 255, 175, 68, -30, 32, 208, 108, 242,
+                      -35, 38, 112, -92, 58, 145, 240, -80, 65, 72, 160, -55,
+                      115, 230, 78, -20, 82, -25, 165, 200, -40, -18, 195, 235,
+                      52, 220, 128, 108, 82, 185, 142, 195, -60, -85, 170, 175,
+                      62, 45, 120, 232, 72, 155, 198, 82, 112, 20, 32, 72, -6,
+                      115, 185, -8, 88, 112, 240, 102, 68, 125, -15, 78, -92,
+                      175, -50, 70, 230, 255, 160, -78, 165, 40, 58, -35, 250,
+                      -92, 208, 145, 20, 112, 185, 242, 170, -25, 235, 82, 72,
+                      -55, 112, 52, 115, 255, 108, 68, 78, 220, 145, -30, 200,
+                      -60, 160, 58, 102, -20, -40, -85, 32, 78, 230, 20, -15,
+                      175, 88, -92, 195, 112, 82, -78, 255, 165, 115, 68, 112,
+                      125, -25, 58, 170, 240,
+                    ];
 
-                       ];
-                   
-                       const barCount = data.length;
-                       const barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
-                       const maxValue = Math.max(...data);
-                   
-                       ctx.clearRect(0, 0, canvas.width, canvas.height);
-                   
-                       for (let i = 0; i < barCount; i++) {
-                         const barHeight = (data[i] / maxValue) * canvas.height;
-                         const x = i * (barWidth * 2); // Adjust the position based on barWidth
-                         const y = canvas.height - barHeight;
-                   
-                         ctx.fillStyle = 'blue';
-                         ctx.fillRect(x, y, barWidth, barHeight);
-                       }
-                     </script>
+                    const barCount = data.length;
+                    const barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
+                    const maxValue = Math.max(...data);
 
-                  </div>
-                  <div class="rf-config">
-                     <form action="">
-                        <input type="radio" id="2-fsk" name="modulation" value="HTML">
-                        <label for="html">2-FSK</label><br>
-                        <input type="radio" id="gfsk" name="modulation" value="CSS">
-                        <label for="css">GFSK</label><br>
-                        <input type="radio" id="ask-ook" name="modulation" value="JavaScript">
-                        <label for="javascript">ASK/OOK</label>
-                        <input type="radio" id="4-fsk" name="modulation" value="JavaScript">
-                        <label for="javascript">4-FSK</label>
-                        <input type="radio" id="msk" name="modulation" value="JavaScript">
-                        <label for="javascript">MSK</label>
-                        <label for="start-freq">Start Frequency:</label><br>
-                        <input type="text" id="start-freq" name="start-freq" value="315MHz"><br>
-                        <label for="freq-step">Step:</label><br>
-                        <input type="text" id="freq-step" name="freq-step" value="0.01"><br><br>
-                        <input type="submit" value="Submit">
-                      </form>
-                  </div>
-               </div>
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    for (let i = 0; i < barCount; i++) {
+                      const barHeight = (data[i] / maxValue) * canvas.height;
+                      const x = i * (barWidth * 2); // Adjust the position based on barWidth
+                      const y = canvas.height - barHeight;
+
+                      ctx.fillStyle = "red";
+                      ctx.fillRect(x, y, barWidth, barHeight);
+                    }
+                  </script>
+                </div>
+              </div>
+              <div class="rf-config">
+                <form action="">
+                  <input
+                    type="radio"
+                    id="2-fsk"
+                    name="modulation"
+                    value="HTML"
+                  />
+                  <label for="html">2-FSK</label>
+                  <input type="radio" id="gfsk" name="modulation" value="CSS" />
+                  <label for="css">GFSK</label>
+                  <input
+                    type="radio"
+                    id="ask-ook"
+                    name="modulation"
+                    value="JavaScript"
+                  />
+                  <label for="javascript">ASK/OOK</label>
+                  <input
+                    type="radio"
+                    id="4-fsk"
+                    name="modulation"
+                    value="JavaScript"
+                  />
+                  <label for="javascript">4-FSK</label>
+                  <input
+                    type="radio"
+                    id="msk"
+                    name="modulation"
+                    value="JavaScript"
+                  />
+                  <label for="javascript">MSK</label><br />
+                  <label for="start-freq">Start Frequency:</label><br />
+                  <input
+                    type="text"
+                    id="start-freq"
+                    name="start-freq"
+                    value="315MHz"
+                  /><br />
+                  <label for="freq-step">Step:</label><br />
+                  <input
+                    type="text"
+                    id="freq-step"
+                    name="freq-step"
+                    value="0.01"
+                  /><br /><br />
+                  <input type="submit" value="Submit" />
+                </form>
+              </div>
             </div>
-         </div>
-         <div class="btn-container">
+          </div>
+          <div class="btn-container">
             <button class="btn" id="btnscanRF">SCAN</button>
-         </div>
+          </div>
+        </div>
       </div>
-   </section>
-   <section id="tx">
+    </section>
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <section id="tx">
       <div class="section-container">
-         <div class="main-display">
-            <div class="main-content">
-               <div class="content-header">
-                  <div class="content-header-left">
-                     <div class="slot-content">
-                        Do Nguyen Huy Hieu
-                     </div>
-                     <div class="dropdown">
-                        <span>M</span>
-                        <div class="dropdown-content">
-                           <p>Hello World!</p>
-                        </div>
-                        <div class="dropdown-content">
-                           <p>Hello World!</p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="content-header-right">
-                     20.02dB
-                  </div>
-               </div>
-               <div class="content-body">
-                  <textarea name="" id="" cols="95%" rows="15%"></textarea>
-               </div>
-               <div class="bit-container">
+        <div class="main-display">
+          <div class="main-content">
+            <div class="content-body">
+              <div class="rx-data">
+                <div class="bit-container">
                   <p class="bit-content">010101010100101010101010010</p>
-               </div>
+                </div>
+              </div>
+              <div class="rx-config">
+                <form action="">
+                  <label for="modulation">Modulation:</label>
+                  <select id="modulation" name="modulation">
+                    <option value="2-FSK">2-FSK</option>
+                    <option value="GFSK">GFSK</option>
+                    <option value="ASK/OOK">ASK/OOK</option>
+                    <option value="4-FSK">4-FSK</option>
+                    <option value="MSK">MSK</option></select
+                  ><br />
+
+                  <label for="basicFrequency">Frequency (MHz):</label>
+                  <input
+                    type="number"
+                    id="basicFrequency"
+                    name="basicFrequency"
+                    step="0.01"
+                    min="300"
+                    max="928"
+                    value="433.92"
+                  /><br />
+
+                  <label for="receiveBW">Receive Bandwidth (kHz):</label>
+                  <input
+                    type="number"
+                    id="receiveBW"
+                    name="receiveBW"
+                    step="0.01"
+                    min="58.03"
+                    max="812.50"
+                    value="812.50"
+                  /><br />
+
+                  <label for="frequencyDeviation"
+                    >Frequency Deviation (kHz):</label
+                  >
+                  <input
+                    type="number"
+                    id="frequencyDeviation"
+                    name="frequencyDeviation"
+                    step="0.01"
+                    min="1.58"
+                    max="380.85"
+                    value="47.60"
+                  /><br />
+
+                  <label for="channelNumber">Channel Number:</label>
+                  <input
+                    type="number"
+                    id="channelNumber"
+                    name="channelNumber"
+                    step="1"
+                    min="0"
+                    max="255"
+                    value="0"
+                  /><br />
+
+                  <label for="channelSpacing">Channel Spacing (kHz):</label>
+                  <input
+                    type="number"
+                    id="channelSpacing"
+                    name="channelSpacing"
+                    step="0.01"
+                    min="25.39"
+                    max="405.45"
+                    value="199.95"
+                  /><br />
+
+                  <label for="dataRate">Data Rate (kBaud):</label>
+                  <input
+                    type="number"
+                    id="dataRate"
+                    name="dataRate"
+                    step="0.01"
+                    min="0.02"
+                    max="1621.83"
+                    value="99.97"
+                  /><br />
+
+                  <label for="whitening">Data Whitening:</label>
+                  <input
+                    type="checkbox"
+                    id="whitening"
+                    name="whitening"
+                    value="1"
+                  /><br />
+
+                  <label for="fec"
+                    >Enable Forward Error Correction (FEC)
+                  </label>
+                  <input type="checkbox" id="fec" name="fec" value="1" /><br />
+
+                  <label for="manchester"
+                    >Enable Manchester Encoding/Decoding</label
+                  >
+                  <input
+                    type="checkbox"
+                    id="manchester"
+                    name="manchester"
+                    value="1"
+                  /><br />
+
+                  <label for="appendStatus"
+                    >Enable Appending Status Bytes</label
+                  >
+                  <input
+                    type="checkbox"
+                    id="appendStatus"
+                    name="appendStatus"
+                    value="1"
+                  /><br />
+
+                  <input type="submit" value="Submit" />
+                </form>
+              </div>
             </div>
-         </div>
-         <div class="btn-container">
-            <button class="btn" id="btnSendRF">Execute</button>
-            <button class="btn">Next</button>
-         </div>
+          </div>
+        </div>
+        <div class="btn-container">
+          <button class="btn">RX ON</button>
+          <button class="btn">STOP</button>
+        </div>
       </div>
-   </section>
-   <section id="rx">
+    </section>
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <section id="rx">
       <div class="section-container">
-         <div class="main-display">
-            <div class="main-content">
-               <div class="rx-config">
-                  <form action="">
-                     
-                     <label for="modulation">Modulation:</label>
-                     <select id="modulation" name="modulation">
-                       <option value="2-FSK">2-FSK</option>
-                       <option value="GFSK">GFSK</option>
-                       <option value="ASK/OOK">ASK/OOK</option>
-                       <option value="4-FSK">4-FSK</option>
-                       <option value="MSK">MSK</option>
-                     </select><br>
-                     
-                     <label for="basicFrequency">Frequency (MHz):</label>
-                     <input type="number" id="basicFrequency" name="basicFrequency" step="0.01" min="300" max="928" value="433.92"><br>
-                  
-                     <label for="receiveBW">Receive Bandwidth (kHz):</label>
-                     <input type="number" id="receiveBW" name="receiveBW" step="0.01" min="58.03" max="812.50" value="812.50"><br>
-                     <label for="frequencyDeviation">Frequency Deviation (kHz):</label>
-                     <input type="number" id="frequencyDeviation" name="frequencyDeviation" step="0.01" min="1.58" max="380.85" value="47.60"><br>
-                     <label for="channelNumber">Channel Number:</label>
-                     <input type="number" id="channelNumber" name="channelNumber" step="1" min="0" max="255" value="0"><br>
-                     <label for="channelSpacing">Channel Spacing (kHz):</label>
-                     <input type="number" id="channelSpacing" name="channelSpacing" step="0.01" min="25.39" max="405.45" value="199.95"><br>
-                     <label for="dataRate">Data Rate (kBaud):</label>
-                     <input type="number" id="dataRate" name="dataRate" step="0.01" min="0.02" max="1621.83" value="99.97"><br>
-                     <label for="whitening">Data Whitening:</label>
-                     <input type="checkbox" id="whitening" name="whitening" value="1">
-                     <label for="fec">Enable Forward Error Correction (FEC) </label>                                                   
-                     <input type="checkbox" id="fec" name="fec" value="1">
-                     <label for="manchester">Enable Manchester Encoding/Decoding</label>
-                     <input type="checkbox" id="manchester" name="manchester" value="1">
-                     <label for="appendStatus">Enable Appending Status Bytes</label>
-                     <input type="checkbox" id="appendStatus" name="appendStatus" value="1">
-                     <input type="submit" value="Submit">
-                   </form>
-               </div>
-               <div class="rx-data">
-               </div>
+        <div class="main-display">
+          <div class="main-content">
+            <div class="content-body">
+              <div class="rx-data">
+                <div class="bit-container">
+                  <p class="bit-content">010101010100101010101010010</p>
+                </div>
+              </div>
+              <div class="rx-config">
+                <form action="">
+                  <label for="modulation">Modulation:</label>
+                  <select id="modulation" name="modulation">
+                    <option value="2-FSK">2-FSK</option>
+                    <option value="GFSK">GFSK</option>
+                    <option value="ASK/OOK">ASK/OOK</option>
+                    <option value="4-FSK">4-FSK</option>
+                    <option value="MSK">MSK</option></select
+                  ><br />
+
+                  <label for="basicFrequency">Frequency (MHz):</label>
+                  <input
+                    type="number"
+                    id="basicFrequency"
+                    name="basicFrequency"
+                    step="0.01"
+                    min="300"
+                    max="928"
+                    value="433.92"
+                  /><br />
+
+                  <label for="frequencyDeviation"
+                    >Frequency Deviation (kHz):</label
+                  >
+                  <input
+                    type="number"
+                    id="frequencyDeviation"
+                    name="frequencyDeviation"
+                    step="0.01"
+                    min="1.58"
+                    max="380.85"
+                    value="47.60"
+                  /><br />
+
+                  <label for="channelNumber">Channel Number:</label>
+                  <input
+                    type="number"
+                    id="channelNumber"
+                    name="channelNumber"
+                    step="1"
+                    min="0"
+                    max="255"
+                    value="0"
+                  /><br />
+
+                  <label for="channelSpacing">Channel Spacing (kHz):</label>
+                  <input
+                    type="number"
+                    id="channelSpacing"
+                    name="channelSpacing"
+                    step="0.01"
+                    min="25.39"
+                    max="405.45"
+                    value="199.95"
+                  /><br />
+
+                  <label for="receiveBW">Receive Bandwidth (kHz):</label>
+                  <input
+                    type="number"
+                    id="receiveBW"
+                    name="receiveBW"
+                    step="0.01"
+                    min="58.03"
+                    max="812.50"
+                    value="812.50"
+                  /><br />
+
+                  <label for="dataRate">Data Rate (kBaud):</label>
+                  <input
+                    type="number"
+                    id="dataRate"
+                    name="dataRate"
+                    step="0.01"
+                    min="0.02"
+                    max="1621.83"
+                    value="99.97"
+                  /><br />
+
+                  <label for="power">Set TxPower:</label>
+                  <select id="power" name="power">
+                    <option value="-30">-30 dBm</option>
+                    <option value="-20">-20 dBm</option>
+                    <option value="-15">-15 dBm</option>
+                    <option value="-10">-10 dBm</option>
+                    <option value="-6">-6 dBm</option>
+                    <option value="0">0 dBm</option>
+                    <option value="5">5 dBm</option>
+                    <option value="7">7 dBm</option>
+                    <option value="10">10 dBm</option>
+                    <option value="11">11 dBm</option>
+                    <option value="12">12 dBm</option></select
+                  ><br />
+
+                  <label for="syncMode">Set Sync Mode:</label>
+                  <select id="syncMode" name="syncMode">
+                    <option value="0">0 - No preamble/sync</option>
+                    <option value="1">1 - 16 sync word bits detected</option>
+                    <option value="2">2 - 16/16 sync word bits detected</option>
+                    <option value="3">3 - 30/32 sync word bits detected</option>
+                    <option value="4">
+                      4 - No preamble/sync, carrier-sense above threshold
+                    </option>
+                    <option value="5">
+                      5 - 15/16 + carrier-sense above threshold
+                    </option>
+                    <option value="6">
+                      6 - 16/16 + carrier-sense above threshold
+                    </option>
+                    <option value="7">
+                      7 - 30/32 + carrier-sense above threshold
+                    </option></select
+                  ><br />
+
+                  <label for="address">Set Address:</label>
+                  <input type="text" id="address" name="address" /><br />
+
+                  <label for="whitening">Data Whitening:</label>
+                  <input
+                    type="checkbox"
+                    id="whitening"
+                    name="whitening"
+                    value="1"
+                  /><br />
+                  <label for="pktFormat">Set Packet Format:</label>
+                  <select id="pktFormat" name="pktFormat">
+                    <option value="0">Normal mode</option>
+                    <option value="1">Synchronous serial mode</option>
+                    <option value="2">Random TX mode</option>
+                    <option value="3">Asynchronous serial mode</option></select
+                  ><br />
+
+                  <label for="lengthConfig">Set Length Configuration:</label>
+                  <select id="lengthConfig" name="lengthConfig">
+                    <option value="0">Fixed packet length mode</option>
+                    <option value="1">Variable packet length mode</option>
+                    <option value="2">Infinite packet length mode</option>
+                    <option value="3">Reserved</option></select
+                  ><br />
+
+                  <label for="packetLength">Set Packet Length:</label>
+                  <input
+                    type="number"
+                    id="packetLength"
+                    name="packetLength"
+                    min="1"
+                    max="255"
+                  /><br />
+                  <label for="crc">Set CRC:</label>
+                  <select id="crc" name="crc">
+                    <option value="1">Enabled</option>
+                    <option value="0">Disabled</option></select
+                  ><br />
+                  <label for="crcaf">Enable Automatic Flush of RX FIFO:</label>
+                  <select id="crcaf" name="crcaf">
+                    <option value="1">Enabled</option>
+                    <option value="0">Disabled</option></select
+                  ><br />
+                  <label for="dcfilteroff"
+                    >Disable Digital DC Blocking Filter:</label
+                  >
+                  <select id="dcfilteroff" name="dcfilteroff">
+                    <option value="1">Disable (current optimized)</option>
+                    <option value="0">
+                      Enable (better sensitivity)
+                    </option></select
+                  ><br />
+                  <label for="manchester"
+                    >Enable Manchester Encoding/Decoding:</label
+                  >
+                  <select id="manchester" name="manchester">
+                    <option value="0">Disable</option>
+                    <option value="1">Enable</option></select
+                  ><br />
+                  <label for="fec"
+                    >Enable Forward Error Correction (FEC)
+                  </label>
+                  <input type="checkbox" id="fec" name="fec" value="1" /><br />
+
+                  <label for="manchester"
+                    >Enable Manchester Encoding/Decoding</label
+                  >
+                  <input
+                    type="checkbox"
+                    id="manchester"
+                    name="manchester"
+                    value="1"
+                  /><br />
+
+                  <label for="appendStatus"
+                    >Enable Appending Status Bytes</label
+                  >
+                  <input
+                    type="checkbox"
+                    id="appendStatus"
+                    name="appendStatus"
+                    value="1"
+                  /><br />
+
+                  <input type="submit" value="Submit" />
+                </form>
+              </div>
             </div>
-         </div>
-         <div class="btn-container">
-            <button class="btn">RX ON</button>
-            <button class="btn">STOP</button>
-         </div>
+          </div>
+        </div>
+        <div class="btn-container">
+          <button class="btn">RX ON</button>
+          <button class="btn">STOP</button>
+        </div>
       </div>
-   </section>
-   <section id="jamming">
+    </section>
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <section id="jamming">
       <div class="section-container">
-         <div class="main-display">
-            <div class="main-content">
-               <div class="content-header">
-                  <div class="content-header-left">
+        <div class="main-display">
+          <div class="main-content">
+            <div class="content-header">
+              <div class="content-header-left"></div>
 
-                  </div>
-
-                  <div class="content-header-right">
-                     
-                  </div>
-               </div>
-               <div class="content-body">
-                  <div class="form-group">
-                     <label class="form-label" for="radioOn">On</label>
-                     <input type="radio" id="radioOn" name="radioOption" value="on">
-                     <label class="form-label" for="radioOff">Off</label>
-                     <input type="radio" id="radioOff" name="radioOption" value="off">
-                     <input type="text" id="textInput" placeholder="Enter text">
-                   </div>
-                   <div class="form-group">
-                     <label class="form-label" for="radioOn">On</label>
-                     <input type="radio" id="radioOn" name="radioOption" value="on">
-                     <label class="form-label" for="radioOff">Off</label>
-                     <input type="radio" id="radioOff" name="radioOption" value="off">
-                     <input type="text" id="textInput" placeholder="Enter text">
-                   </div>
-                   <div class="form-group">
-                     <label class="form-label" for="radioOn">On</label>
-                     <input type="radio" id="radioOn" name="radioOption" value="on">
-                     <label class="form-label" for="radioOff">Off</label>
-                     <input type="radio" id="radioOff" name="radioOption" value="off">
-                     <input type="text" id="textInput" placeholder="Enter text">
-                   </div>
-                   <div class="form-group">
-                     <label class="form-label" for="radioOn">On</label>
-                     <input type="radio" id="radioOn" name="radioOption" value="on">
-                     <label class="form-label" for="radioOff">Off</label>
-                     <input type="radio" id="radioOff" name="radioOption" value="off">
-                     <input type="text" id="textInput" placeholder="Enter text">
-                   </div>
-               </div>
+              <div class="content-header-right"></div>
             </div>
-         </div>
-         <div class="btn-container">
-            <script>
-               let isRunning = false;
-           
-               function toggleStartStop() {
-                 const button = document.getElementById('startStopButton');
-                 
-                 if (isRunning) {
-                   button.textContent = 'Start';
-                   isRunning = false;
-                   // Add code here to stop any ongoing process
-                 } else {
-                   button.textContent = 'Stop';
-                   isRunning = true;
-                   // Add code here to start a process
-                 }
-               }
-             </script>
-            <button class="btn" id="startStopButton" onclick="toggleStartStop()">Start</button>
-         </div>
-      </div>
-   </section>
-   <script src="main.js"></script>
-</body>
+            <div class="content-body">
+              <div class="form-group">
+                <label class="form-label" for="radioOn">On</label>
+                <input
+                  type="radio"
+                  id="radioOn"
+                  name="radioOption"
+                  value="on"
+                />
+                <label class="form-label" for="radioOff">Off</label>
+                <input
+                  type="radio"
+                  id="radioOff"
+                  name="radioOption"
+                  value="off"
+                />
+                <input type="text" id="textInput" placeholder="Enter text" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="radioOn">On</label>
+                <input
+                  type="radio"
+                  id="radioOn"
+                  name="radioOption"
+                  value="on"
+                />
+                <label class="form-label" for="radioOff">Off</label>
+                <input
+                  type="radio"
+                  id="radioOff"
+                  name="radioOption"
+                  value="off"
+                />
+                <input type="text" id="textInput" placeholder="Enter text" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="radioOn">On</label>
+                <input
+                  type="radio"
+                  id="radioOn"
+                  name="radioOption"
+                  value="on"
+                />
+                <label class="form-label" for="radioOff">Off</label>
+                <input
+                  type="radio"
+                  id="radioOff"
+                  name="radioOption"
+                  value="off"
+                />
+                <input type="text" id="textInput" placeholder="Enter text" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="radioOn">On</label>
+                <input
+                  type="radio"
+                  id="radioOn"
+                  name="radioOption"
+                  value="on"
+                />
+                <label class="form-label" for="radioOff">Off</label>
+                <input
+                  type="radio"
+                  id="radioOff"
+                  name="radioOption"
+                  value="off"
+                />
+                <input type="text" id="textInput" placeholder="Enter text" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-container">
+          <script>
+            let isRunning = false;
 
+            function toggleStartStop() {
+              const button = document.getElementById("startStopButton");
+
+              if (isRunning) {
+                button.textContent = "Start";
+                isRunning = false;
+                // Add code here to stop any ongoing process
+              } else {
+                button.textContent = "Stop";
+                isRunning = true;
+                // Add code here to start a process
+              }
+            }
+          </script>
+          <button class="btn" id="startStopButton" onclick="toggleStartStop()">
+            Start
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <script src="main.js"></script>
+  </body>
 </html>
