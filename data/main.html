@@ -146,7 +146,7 @@
                   <select id="modulation" name="modulation">
                     <option value="2-FSK">2-FSK</option>
                     <option value="GFSK">GFSK</option>
-                    <option value="ASK/OOK">ASK/OOK</option>
+                    <option value="ASK/OOK" selected>ASK/OOK</option>
                     <option value="4-FSK">4-FSK</option>
                     <option value="MSK">MSK</option></select
                   ><br />
@@ -231,14 +231,16 @@
                     <option value="7">7 dBm</option>
                     <option value="10">10 dBm</option>
                     <option value="11">11 dBm</option>
-                    <option value="12">12 dBm</option></select
+                    <option value="12" selected>12 dBm</option></select
                   ><br />
 
                   <label for="syncMode">Set Sync Mode:</label>
                   <select id="syncMode" name="syncMode">
                     <option value="0">0 - No preamble/sync</option>
                     <option value="1">1 - 16 sync word bits detected</option>
-                    <option value="2">2 - 16/16 sync word bits detected</option>
+                    <option value="2" selected>
+                      2 - 16/16 sync word bits detected
+                    </option>
                     <option value="3">3 - 30/32 sync word bits detected</option>
                     <option value="4">
                       4 - No preamble/sync, carrier-sense above threshold
@@ -258,7 +260,7 @@
                     type="text"
                     id="syncWordHigh"
                     name="syncWordHigh"
-                    value=""
+                    value="211"
                   /><br />
 
                   <label for="syncWordLow">Sync Word Low:</label>
@@ -266,12 +268,12 @@
                     type="text"
                     id="syncWordLow"
                     name="syncWordLow"
-                    value=""
+                    value="145"
                   /><br />
 
                   <label for="adrCheck">Address Check Configuration:</label>
                   <select id="adrCheck" name="adrCheck">
-                    <option value="0">No address check</option>
+                    <option value="0" selected>No address check</option>
                     <option value="1">Address check, no broadcast</option>
                     <option value="2">
                       Address check and 0 (0x00) broadcast
@@ -282,17 +284,17 @@
                   ><br />
 
                   <label for="address">Set Address:</label>
-                  <input type="text" id="address" name="address" /><br />
+                  <input type="text" id="address" name="address" value="0" /><br />
 
                   <label for="whitening">Data Whitening:</label>
                   <select id="whitening" name="whitening">
                     <option value="0">Enable</option>
-                    <option value="1">Disable</option></select
+                    <option value="1" selected>Disable</option></select
                   ><br />
 
                   <label for="pktFormat">Set Packet Format:</label>
                   <select id="pktFormat" name="pktFormat">
-                    <option value="0">Normal mode</option>
+                    <option value="0" selected>Normal mode</option>
                     <option value="1">Synchronous serial mode</option>
                     <option value="2">Random TX mode</option>
                     <option value="3">Asynchronous serial mode</option></select
@@ -301,7 +303,7 @@
                   <label for="lengthConfig">Set Length Configuration:</label>
                   <select id="lengthConfig" name="lengthConfig">
                     <option value="0">Fixed packet length mode</option>
-                    <option value="1">Variable packet length mode</option>
+                    <option value="1" selected>Variable packet length mode</option>
                     <option value="2">Infinite packet length mode</option>
                     <option value="3">Reserved</option></select
                   ><br />
@@ -313,16 +315,17 @@
                     name="packetLength"
                     min="1"
                     max="255"
+                    value="0"
                   /><br />
                   <label for="crc">Set CRC:</label>
                   <select id="crc" name="crc">
                     <option value="1">Enabled</option>
-                    <option value="0">Disabled</option></select
+                    <option value="0" selected>Disabled</option></select
                   ><br />
                   <label for="crcaf">Enable Automatic Flush of RX FIFO:</label>
                   <select id="crcaf" name="crcaf">
                     <option value="1">Enabled</option>
-                    <option value="0">Disabled</option></select
+                    <option value="0" selected>Disabled</option></select
                   ><br />
                   <label for="dcfilteroff"
                     >Disable Digital DC Blocking Filter:</label
@@ -350,7 +353,7 @@
 
                   <label for="pre">Set Preamble:</label>
                   <select id="pre" name="pre">
-                    <option value="0">2</option>
+                    <option value="0" selected>2</option>
                     <option value="1">3</option>
                     <option value="2">4</option>
                     <option value="3">6</option>
@@ -366,6 +369,7 @@
                     name="pqt"
                     min="0"
                     max="255"
+                    value="0"
                   /><br />
 
                   <label for="appendstatus">Set Append Status:</label>
@@ -403,7 +407,7 @@
                   <select id="modulation" name="modulation">
                     <option value="2-FSK">2-FSK</option>
                     <option value="GFSK">GFSK</option>
-                    <option value="ASK/OOK">ASK/OOK</option>
+                    <option value="ASK/OOK" selected>ASK/OOK</option>
                     <option value="4-FSK">4-FSK</option>
                     <option value="MSK">MSK</option></select
                   ><br />
@@ -488,14 +492,16 @@
                     <option value="7">7 dBm</option>
                     <option value="10">10 dBm</option>
                     <option value="11">11 dBm</option>
-                    <option value="12">12 dBm</option></select
+                    <option value="12" selected>12 dBm</option></select
                   ><br />
 
                   <label for="syncMode">Set Sync Mode:</label>
                   <select id="syncMode" name="syncMode">
                     <option value="0">0 - No preamble/sync</option>
                     <option value="1">1 - 16 sync word bits detected</option>
-                    <option value="2">2 - 16/16 sync word bits detected</option>
+                    <option value="2" selected>
+                      2 - 16/16 sync word bits detected
+                    </option>
                     <option value="3">3 - 30/32 sync word bits detected</option>
                     <option value="4">
                       4 - No preamble/sync, carrier-sense above threshold
@@ -515,7 +521,7 @@
                     type="text"
                     id="syncWordHigh"
                     name="syncWordHigh"
-                    value=""
+                    value="211"
                   /><br />
 
                   <label for="syncWordLow">Sync Word Low:</label>
@@ -523,12 +529,12 @@
                     type="text"
                     id="syncWordLow"
                     name="syncWordLow"
-                    value=""
+                    value="145"
                   /><br />
 
                   <label for="adrCheck">Address Check Configuration:</label>
                   <select id="adrCheck" name="adrCheck">
-                    <option value="0">No address check</option>
+                    <option value="0" selected>No address check</option>
                     <option value="1">Address check, no broadcast</option>
                     <option value="2">
                       Address check and 0 (0x00) broadcast
@@ -539,17 +545,17 @@
                   ><br />
 
                   <label for="address">Set Address:</label>
-                  <input type="text" id="address" name="address" /><br />
+                  <input type="text" id="address" name="address" value="0" /><br />
 
                   <label for="whitening">Data Whitening:</label>
                   <select id="whitening" name="whitening">
                     <option value="0">Enable</option>
-                    <option value="1">Disable</option></select
+                    <option value="1" selected>Disable</option></select
                   ><br />
 
                   <label for="pktFormat">Set Packet Format:</label>
                   <select id="pktFormat" name="pktFormat">
-                    <option value="0">Normal mode</option>
+                    <option value="0" selected>Normal mode</option>
                     <option value="1">Synchronous serial mode</option>
                     <option value="2">Random TX mode</option>
                     <option value="3">Asynchronous serial mode</option></select
@@ -558,7 +564,7 @@
                   <label for="lengthConfig">Set Length Configuration:</label>
                   <select id="lengthConfig" name="lengthConfig">
                     <option value="0">Fixed packet length mode</option>
-                    <option value="1">Variable packet length mode</option>
+                    <option value="1" selected>Variable packet length mode</option>
                     <option value="2">Infinite packet length mode</option>
                     <option value="3">Reserved</option></select
                   ><br />
@@ -570,16 +576,17 @@
                     name="packetLength"
                     min="1"
                     max="255"
+                    value="0"
                   /><br />
                   <label for="crc">Set CRC:</label>
                   <select id="crc" name="crc">
                     <option value="1">Enabled</option>
-                    <option value="0">Disabled</option></select
+                    <option value="0" selected>Disabled</option></select
                   ><br />
                   <label for="crcaf">Enable Automatic Flush of RX FIFO:</label>
                   <select id="crcaf" name="crcaf">
                     <option value="1">Enabled</option>
-                    <option value="0">Disabled</option></select
+                    <option value="0" selected>Disabled</option></select
                   ><br />
                   <label for="dcfilteroff"
                     >Disable Digital DC Blocking Filter:</label
@@ -607,7 +614,7 @@
 
                   <label for="pre">Set Preamble:</label>
                   <select id="pre" name="pre">
-                    <option value="0">2</option>
+                    <option value="0" selected>2</option>
                     <option value="1">3</option>
                     <option value="2">4</option>
                     <option value="3">6</option>
@@ -623,6 +630,7 @@
                     name="pqt"
                     min="0"
                     max="255"
+                    value="0"
                   /><br />
 
                   <label for="appendstatus">Set Append Status:</label>
@@ -654,45 +662,49 @@
               <div class="content-header-right"></div>
             </div>
             <div class="content-body">
-               <form action="your_script_to_handle_form_data.php" method="post">
-                  <label for="frequencyCount">Select Number of Frequencies:</label>
-                  <select id="frequencyCount" name="frequencyCount">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                  </select><br />
-                
-                  <!-- Frequency input fields will be dynamically added using JavaScript based on the selected frequency count -->
-                  <div id="frequencyInputs">
-                    <!-- Input fields will be added here -->
-                  </div>
-                
-                  <button type="submit">Submit</button>
-                </form>
-                
-                <script>
-                  const frequencyCountSelect = document.getElementById("frequencyCount");
-                  const frequencyInputsContainer = document.getElementById("frequencyInputs");
-                
-                  // Function to create input fields based on selected frequency count
-                  frequencyCountSelect.addEventListener("change", function() {
-                    const frequencyCount = parseInt(frequencyCountSelect.value);
-                    frequencyInputsContainer.innerHTML = ""; // Clear existing input fields
-                
-                    for (let i = 1; i <= frequencyCount; i++) {
-                      const inputField = document.createElement("input");
-                      inputField.type = "text";
-                      inputField.name = "frequency" + i;
-                      inputField.placeholder = "Enter Frequency " + i;
-                      inputField.required = true;
-                      frequencyInputsContainer.appendChild(inputField);
-                    }
-                  });
-                
-                  // Initialize with default value
-                  frequencyCountSelect.dispatchEvent(new Event("change"));
-                </script>
+              <form action="your_script_to_handle_form_data.php" method="post">
+                <label for="frequencyCount"
+                  >Select Number of Frequencies:</label
+                >
+                <select id="frequencyCount" name="frequencyCount">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option></select
+                ><br />
+
+                <!-- Frequency input fields will be dynamically added using JavaScript based on the selected frequency count -->
+                <div id="frequencyInputs">
+                  <!-- Input fields will be added here -->
+                </div>
+
+                <button type="submit">Submit</button>
+              </form>
+
+              <script>
+                const frequencyCountSelect =
+                  document.getElementById("frequencyCount");
+                const frequencyInputsContainer =
+                  document.getElementById("frequencyInputs");
+
+                // Function to create input fields based on selected frequency count
+                frequencyCountSelect.addEventListener("change", function () {
+                  const frequencyCount = parseInt(frequencyCountSelect.value);
+                  frequencyInputsContainer.innerHTML = ""; // Clear existing input fields
+
+                  for (let i = 1; i <= frequencyCount; i++) {
+                    const inputField = document.createElement("input");
+                    inputField.type = "text";
+                    inputField.name = "frequency" + i;
+                    inputField.placeholder = "Enter Frequency " + i;
+                    inputField.required = true;
+                    frequencyInputsContainer.appendChild(inputField);
+                  }
+                });
+
+                // Initialize with default value
+                frequencyCountSelect.dispatchEvent(new Event("change"));
+              </script>
             </div>
           </div>
         </div>
