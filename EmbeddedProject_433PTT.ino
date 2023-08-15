@@ -60,17 +60,17 @@ void handlePostScanSubmit(AsyncWebServerRequest *request, uint8_t *data, size_t 
   if (root.success()) {
       tool.changeDriver(ELECHOUSE_CC1101_DRIVER);
       tool.ELECHOUSE_CC1101_SetRX();
-    if (root.containsKey("scan_modulation")) {
-      tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["scan_modulation"].as<int>()); 
-      Serial.println("Modulation: " + String(root["scan_modulation"].as<int>()));
+    if (root.containsKey("modulation")) {
+      tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["modulation"].as<int>()); 
+      Serial.println("Modulation: " + String(root["modulation"].as<int>()));
     }
-    if (root.containsKey("scan_start_frequency")) {
-      tool._RFSpecs.scan_start_Frequency = static_cast<_433PTT_MODULATIONS>(root["scan_start_frequency"].as<int>());
-      Serial.println("Start Frequency: " + String(root["scan_start_frequency"].as<int>()));
+    if (root.containsKey("startFrequency")) {
+      tool._RFSpecs.scan_start_Frequency = static_cast<_433PTT_MODULATIONS>(root["startFrequency"].as<int>());
+      Serial.println("Start Frequency: " + String(root["startFrequency"].as<int>()));
     }
-    if (root.containsKey("scan_step")) {
-      tool._RFSpecs.scan_increasement = static_cast<_433PTT_MODULATIONS>(root["scan_step"].as<int>());
-      Serial.println("Start Frequency: " + String(root["scan_step"].as<int>()));
+    if (root.containsKey("step")) {
+      tool._RFSpecs.scan_increasement = static_cast<_433PTT_MODULATIONS>(root["step"].as<int>());
+      Serial.println("Start Frequency: " + String(root["step"].as<int>()));
     }
     request->send(200, "text/plain", "");
     tool.cc1101UpdateConfig();
