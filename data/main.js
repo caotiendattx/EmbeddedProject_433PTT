@@ -136,6 +136,7 @@ function fetchDataAndUpdateForm() {
       .then(data => {
          on = 1 - on;
          updateFormWithData(data);
+         console.log('scan data from server: ', data);
       })
       .catch(error => {
          console.error("Error:", error);
@@ -149,7 +150,7 @@ const scanButton = document.getElementById("scanButton");
 scanButton.addEventListener("click", function (event) {
    scanButton.textContent = scanButton.textContent === "SCAN ON" ? "SCAN OFF" : "SCAN ON";
    event.preventDefault();
-   intervalsetInterval(fetchDataAndUpdateForm, 1000);
+   intervalId = setInterval(fetchDataAndUpdateForm, 1000);
 });
 
 window.addEventListener('beforeunload', () => {
