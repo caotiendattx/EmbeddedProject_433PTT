@@ -52,14 +52,14 @@ void handlePostBodySend(AsyncWebServerRequest *request, uint8_t *data, size_t le
       }
   }
 
-//  //SCAN
-void handlePostScan(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+//  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN/////////////////
+void handlePostScanSubmit(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
   DynamicJsonBuffer jsonDynamicBuffer;
   JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
   
   if (root.success()) {
-      tool.changeState(SCAN_STATE);
       tool.changeDriver(ELECHOUSE_CC1101_DRIVER);
+      tool.ELECHOUSE_CC1101_SetRX();
     if (root.containsKey("scan_modulation")) {
       tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["scan_modulation"].as<int>()); 
       Serial.println("Modulation: " + String(root["scan_modulation"].as<int>()));
@@ -90,23 +90,7 @@ void handleGetScanRSSI(AsyncWebServerRequest *request) {
   rssiData.printTo(response);
   request->send(200, "application/json", response);
 }
-void handlePostScanOFF(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-  DynamicJsonBuffer jsonDynamicBuffer;
-  JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
-  
-  if (root.success()) {
-      tool.changeState(IDLE_STATE);
-    if (root.containsKey("scan_off")) {
-      
-      Serial.println("Scan: OFF");
-    }
-    request->send(200, "text/plain", "");
-    tool.cc1101UpdateConfig();
-  } else {
-    request->send(404, "text/plain", "");
-  }
-}
-
+//  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN/////////////////
 //TX RX Config
 void handlePostConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
   DynamicJsonBuffer jsonDynamicBuffer;
@@ -156,8 +140,8 @@ void setUpRoutes(){
   server.on("/postDataRF", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostBodySend);
 
 
-  server.on("/post/scan/submit", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScan);
-  server.on("/post/scan/off", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScanOFF);
+  server.on("/post/scan/submit", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScanSubmit);
+
   
   server.begin();
 }
