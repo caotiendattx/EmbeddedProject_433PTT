@@ -60,7 +60,7 @@ struct RF_Specs{
   float RxBW;
   float DRate;
   TX_POWER TXPower;
-  uint8_t syncMode;
+  int syncMode;
   uint32_t syncWord_1;
   uint32_t syncWord_2;
   uint8_t adrChk;

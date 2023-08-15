@@ -121,7 +121,82 @@ void handlePostConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len,
       tool._RFSpecs.RxBW = root["receiveBW"].as<float>();
       Serial.println(String(tool._RFSpecs.RxBW));
     }
-    
+    if (root.containsKey("dataRate")) {
+      tool._RFSpecs.DRate = root["dataRate"].as<float>();
+      Serial.println(String(tool._RFSpecs.DRate));
+    }
+    if (root.containsKey("power")) {
+      tool._RFSpecs.TXPower = static_cast<TX_POWER>(root["power"].as<int>());
+      Serial.println(String(tool._RFSpecs.TXPower));
+    }
+    if (root.containsKey("syncMode")) {
+      tool._RFSpecs.syncMode = root["syncMode"].as<int>();
+      Serial.println(String(tool._RFSpecs.syncMode));
+    }
+    if (root.containsKey("syncWordHigh")) {
+      tool._RFSpecs.syncWord_1 = root["syncWordHigh"].as<uint32_t>();
+      Serial.println(String(tool._RFSpecs.syncWord_1));
+    }
+    if (root.containsKey("syncWordLow")) {
+      tool._RFSpecs.syncWord_2 = root["syncWordLow"].as<uint32_t>();
+      Serial.println(String(tool._RFSpecs.syncWord_2));
+    }
+    if (root.containsKey("adrCheck")) {
+      tool._RFSpecs.adrChk = root["adrCheck"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.adrChk));
+    }
+    if (root.containsKey("address")) {
+      tool._RFSpecs.addr = root["address"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.addr));
+    }
+    if (root.containsKey("whitening")) {
+      tool._RFSpecs.whitening = root["whitening"].as<bool>();
+      Serial.println(String(tool._RFSpecs.whitening));
+    }
+    if (root.containsKey("pktFormat")) {
+      tool._RFSpecs.pktFormat = root["pktFormat"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.pktFormat));
+    }
+    if (root.containsKey("lengthConfig")) {
+      tool._RFSpecs.lengthConfig = root["lengthConfig"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.lengthConfig));
+    }
+    if (root.containsKey("packetLength")) {
+      tool._RFSpecs.pktLength = root["packetLength"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.pktLength));
+    }
+    if (root.containsKey("crc")) {
+      tool._RFSpecs.crc = root["crc"].as<bool>();
+      Serial.println(String(tool._RFSpecs.crc));
+    }
+    if (root.containsKey("crcaf")) {
+      tool._RFSpecs.crcAF = root["crcaf"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.crcAF));
+    }
+    if (root.containsKey("dcfilteroff")) {
+      tool._RFSpecs.DCFilter = root["dcfilteroff"].as<bool>();
+      Serial.println(String(tool._RFSpecs.DCFilter));
+    }
+    if (root.containsKey("manchester")) {
+      tool._RFSpecs.manchester = root["manchester"].as<bool>();
+      Serial.println(String(tool._RFSpecs.manchester));
+    }
+    if (root.containsKey("fec")) {
+      tool._RFSpecs.FEC = root["fec"].as<int>();
+      Serial.println(String(tool._RFSpecs.FEC));
+    }
+    if (root.containsKey("pre")) {
+      tool._RFSpecs.PRE = root["pre"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.PRE));
+    }
+    if (root.containsKey("pqt")) {
+      tool._RFSpecs.PQT = root["pqt"].as<uint8_t>();
+      Serial.println(String(tool._RFSpecs.PQT));
+    }
+    if (root.containsKey("appendstatus")) {
+      tool._RFSpecs.appendStatus = root["appendstatus"].as<bool>();
+      Serial.println(String(tool._RFSpecs.appendStatus));
+    }
     
     request->send(200, "text/plain", "");
     tool.cc1101UpdateConfig();
