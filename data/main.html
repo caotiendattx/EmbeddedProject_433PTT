@@ -66,6 +66,7 @@
                   </div>
                   <div class="rf-config">
                      <form action="">
+                        <label style="font-weight: bold">Modulation: </label> <br>
                         <input type="radio" id="2-fsk" name="modulation" value="HTML">
                         <label for="html">2-FSK</label><br>
                         <input type="radio" id="gfsk" name="modulation" value="CSS">
@@ -471,14 +472,32 @@
    <section id="jamming">
       <div class="section-container">
          <div class="main-display">
-            <div class="jamming-content">
-               <div class="jamming-col-1">
-                  <label for=""></label>
-                  <label for=""></label>
-               </div>
-               <div class="jamming-col-2">
-                  <label for=""></label>
-                  <label for=""></label>
+            <div class="jamming-container">
+               <div class="jamming-content">
+                  <div class="jamming-header">
+                     <div class="jamming-col">
+                        <label for="jamming-freq-1" style="font-weight: bold;">Frequency: </label>
+                        <input type="number" id="jamming-freq-1" name="pqt" min="0" max="255" value="0" /><br />
+                     </div>
+                     <div class="jamming-col">
+                        <label for="jamming-freq-2" style="font-weight: bold;">Frequency: </label>
+                        <input type="number" id="jamming-freq-2" name="pqt" min="0" max="255" value="0" /><br />
+                     </div>
+                     <div class="jamming-col">
+                        <label for="jamming-freq-3" style="font-weight: bold;">Frequency: </label>
+                        <input type="number" id="jamming-freq-3" name="pqt" min="0" max="255" value="0" /><br />
+                     </div>
+                     <div class="jamming-col">
+                        <label for="jamming-freq-4" style="font-weight: bold;">Frequency: </label>
+                        <input type="number" id="jamming-freq-4" name="pqt" min="0" max="255" value="0" /><br />
+                     </div>
+                  </div>
+                  <div class="jamming-middle">
+                     JAMMING
+                  </div>
+                  <div class="jamming-btn-container">
+                     <button class="jamming-btn" id="startStopButton" onclick="toggleStartStop()">START</button>
+                  </div>
                </div>
             </div>
          </div>
@@ -500,9 +519,9 @@
                   }
                }
             </script>
-            <button class="btn" id="startStopButton" onclick="toggleStartStop()">
+            <!-- <button class="btn" id="startStopButton" onclick="toggleStartStop()">
                Start
-            </button>
+            </button> -->
          </div>
       </div>
    </section>
