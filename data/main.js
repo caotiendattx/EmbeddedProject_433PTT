@@ -131,10 +131,10 @@ function updateFormWithData(data) {
 }
 let on = 1;
 function fetchDataAndUpdateForm() {
-   fetch(`/get/scan?on=${!on}`)
+   fetch(`/get/scan?on=${on}`)
       .then(response => response.json())
       .then(data => {
-         on = !on;
+         on = 1 - on;
          updateFormWithData(data);
       })
       .catch(error => {
@@ -145,8 +145,9 @@ function fetchDataAndUpdateForm() {
 // Fetch and update form every second
 
 let intervalId = null;
-const scanRequest = document.getElementById("scanButton");
-scanRequest.addEventListener("click", function (event) {
+const scanButton = document.getElementById("scanButton");
+scanButton.addEventListener("click", function (event) {
+   scanButton.textContent = scanButton.textContent === "SCAN ON" ? "SCAN OFF" : "SCAN ON";
    event.preventDefault();
    intervalsetInterval(fetchDataAndUpdateForm, 1000);
 });
