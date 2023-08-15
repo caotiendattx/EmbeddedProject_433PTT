@@ -52,6 +52,42 @@ void handlePostBodySend(AsyncWebServerRequest *request, uint8_t *data, size_t le
       }
   }
 
+//  //SCAN
+void handlePostScan(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+  DynamicJsonBuffer jsonDynamicBuffer;
+  JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
+  
+  if (root.success()) {
+    if (root.containsKey("scan_modulation")) {
+      tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["scan_modulation"].as<int>()); 
+      Serial.println("Modulation: " + String(root["scan_modulation"].as<int>()));
+    }
+    if (root.containsKey("scan_start_frequency")) {
+      tool._RFSpecs.scan_start_Frequency = static_cast<_433PTT_MODULATIONS>(root["scan_start_frequency"].as<int>());
+      Serial.println("Start Frequency: " + String(root["scan_start_frequency"].as<int>()));
+    }
+    if (root.containsKey("scan_step")) {
+      tool._RFSpecs.scan_increasement = static_cast<_433PTT_MODULATIONS>(root["scan_step"].as<int>());
+      Serial.println("Start Frequency: " + String(root["scan_step"].as<int>()));
+    }
+    request->send(200, "text/plain", "");
+    tool.cc1101UpdateConfig();
+  } else {
+    request->send(404, "text/plain", "");
+  }
+}
+void handleGetScanRSSI(AsyncWebServerRequest *request) {
+  jsonBuffer.clear();
+  // create an empty array
+  JsonArray& rssiData = jsonBuffer.createArray();
+    for(uint8_t i = 0; i < (sizeof(tool.RSSIScanData)/sizeof(tool.RSSIScanData[0])); i++){
+        rssiData.add(tool.RSSIScanData[i]);
+      }
+  String response;
+  rssiData.printTo(response);
+  request->send(200, "application/json", response);
+}
+
 void setUpRoutes(){
   if(!SPIFFS.begin(true)){
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -71,12 +107,17 @@ void setUpRoutes(){
 
   server.on("/on", HTTP_GET, handleGetView);
 
+ 
+  
   server.on("/postDataRF", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostBodySend);
 
+
+  server.on("/post/scan/submit", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScan);
+  
   server.begin();
 }
 void setup() {
-  Serial.begin(9600); //define frequency of serial monitor
+  Serial.begin(115200); //define frequency of serial monitor
   Serial.println("successfully");
   setupAPMode();
   setUpRoutes();
@@ -120,9 +161,7 @@ void handle_RX_State(){
   }
 }
 void handle_Scan_State(){
-  float start_Frequency;
-  float increasement;
-  tool.getRSSIcc1101(start_Frequency, increasement);
+  tool.getRSSIcc1101(tool._RFSpecs.scan_start_Frequency, tool._RFSpecs.scan_increasement);
   //TODO: DATA TO FE
   // tool.RSSIScanData[i];
 }
