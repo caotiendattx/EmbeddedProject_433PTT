@@ -19,38 +19,38 @@ void setupAPMode() {
   Serial.println(WiFi.softAPIP()); // Print the IP address of the access point
 }
 
-void handleGetView(AsyncWebServerRequest *request) {
-  jsonBuffer.clear();
-  JsonObject& object = jsonBuffer.createObject();
-  // {
-  //   "hello": "world";
-  // }
-  object["hello"] = "world";
-  String response;
-  object.printTo(response);
-  request->send(200, "application/json", response);
-}
+//void handleGetView(AsyncWebServerRequest *request) {
+//  jsonBuffer.clear();
+//  JsonObject& object = jsonBuffer.createObject();
+//  // {
+//  //   "hello": "world";
+//  // }
+//  object["hello"] = "world";
+//  String response;
+//  object.printTo(response);
+//  request->send(200, "application/json", response);
+//}
 
 // example data to post:
 // {
 //   "key1": "value1",
 //   "key2": "value2"
 // }
-void handlePostBodySend(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-      DynamicJsonBuffer jsonDynamicBuffer;
-      JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
-      if (root.success()) {
-        if (root.containsKey("key1")) {
-          Serial.println(root["key"].asString());
-        }
-        if (root.containsKey("key2")) {
-          Serial.println(root["key2"].asString());
-        }
-        request->send(200, "text/plain", "");
-      } else {
-        request->send(404, "text/plain", "");
-      }
-  }
+//void handlePostBodySend(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+//      DynamicJsonBuffer jsonDynamicBuffer;
+//      JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
+//      if (root.success()) {
+//        if (root.containsKey("key1")) {
+//          Serial.println(root["key"].asString());
+//        }
+//        if (root.containsKey("key2")) {
+//          Serial.println(root["key2"].asString());
+//        }
+//        request->send(200, "text/plain", "");
+//      } else {
+//        request->send(404, "text/plain", "");
+//      }
+//  }
 
 //  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN/////////////////
 void handlePostScanSubmit(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
@@ -62,15 +62,15 @@ void handlePostScanSubmit(AsyncWebServerRequest *request, uint8_t *data, size_t 
       tool.ELECHOUSE_CC1101_SetRX();
     if (root.containsKey("modulation")) {
       tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["modulation"].as<int>()); 
-      Serial.println("Modulation: " + String(root["modulation"].as<int>()));
+      Serial.println(String(static_cast<_433PTT_MODULATIONS>(root["modulation"].as<int>())));
     }
     if (root.containsKey("startFrequency")) {
-      tool._RFSpecs.scan_start_Frequency = static_cast<_433PTT_MODULATIONS>(root["startFrequency"].as<int>());
-      Serial.println("Start Frequency: " + String(root["startFrequency"].as<int>()));
+      tool._RFSpecs.scan_start_Frequency = root["startFrequency"].as<float>();
+      Serial.println(String(tool._RFSpecs.scan_start_Frequency));
     }
     if (root.containsKey("step")) {
-      tool._RFSpecs.scan_increasement = static_cast<_433PTT_MODULATIONS>(root["step"].as<int>());
-      Serial.println("Start Frequency: " + String(root["step"].as<int>()));
+      tool._RFSpecs.scan_increasement = root["step"].as<float>();
+      Serial.println(String(tool._RFSpecs.scan_increasement));
     }
     request->send(200, "text/plain", "");
     tool.cc1101UpdateConfig();
@@ -97,18 +97,32 @@ void handlePostConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len,
   JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
   
   if (root.success()) {
-    if (root.containsKey("scan_modulation")) {
-      tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["scan_modulation"].as<int>()); 
-      Serial.println("Modulation: " + String(root["scan_modulation"].as<int>()));
+    if (root.containsKey("modulation")) {
+      tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["modulation"].as<int>()); 
+      Serial.println(String(tool._RFSpecs.modulation));
     }
-    if (root.containsKey("scan_start_frequency")) {
-      tool._RFSpecs.scan_start_Frequency = static_cast<_433PTT_MODULATIONS>(root["scan_start_frequency"].as<int>());
-      Serial.println("Start Frequency: " + String(root["scan_start_frequency"].as<int>()));
+    if (root.containsKey("basicFrequency")) {
+      tool.operatingRFFreq = root["basicFrequency"].as<float>();
+      Serial.println(String(tool.operatingRFFreq));
     }
-    if (root.containsKey("scan_step")) {
-      tool._RFSpecs.scan_increasement = static_cast<_433PTT_MODULATIONS>(root["scan_step"].as<int>());
-      Serial.println("Start Frequency: " + String(root["scan_step"].as<int>()));
+    if (root.containsKey("frequencyDeviation")) {
+      tool._RFSpecs.deviation = root["frequencyDeviation"].as<float>();
+      Serial.println(String(tool._RFSpecs.deviation));
     }
+    if (root.containsKey("channelNumber")) {
+      tool._RFSpecs.channel = root["channelNumber"].as<int>();
+      Serial.println(String(tool._RFSpecs.channel));
+    }
+    if (root.containsKey("channelSpacing")) {
+      tool._RFSpecs.Chsp = root["channelSpacing"].as<float>();
+      Serial.println(String(tool._RFSpecs.Chsp));
+    }
+    if (root.containsKey("receiveBW")) {
+      tool._RFSpecs.RxBW = root["receiveBW"].as<float>();
+      Serial.println(String(tool._RFSpecs.RxBW));
+    }
+    
+    
     request->send(200, "text/plain", "");
     tool.cc1101UpdateConfig();
   } else {
@@ -132,12 +146,12 @@ void setUpRoutes(){
     request->send(SPIFFS, "/main.js", "application/javascript");
   });
 
-  server.on("/on", HTTP_GET, handleGetView);
+//  server.on("/on", HTTP_GET, handleGetView);
 
   server.on("/scan", HTTP_GET, handleGetScanRSSI);
 
   
-  server.on("/postDataRF", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostBodySend);
+//  server.on("/postDataRF", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostBodySend);
 
 
   server.on("/post/scan/submit", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScanSubmit);

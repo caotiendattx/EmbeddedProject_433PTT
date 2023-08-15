@@ -55,7 +55,7 @@ struct RF_Specs{
   bool CCMode;
   _433PTT_MODULATIONS modulation;
   float deviation;
-  uint8_t channel;
+  int channel;
   float Chsp;
   float RxBW;
   float DRate;
