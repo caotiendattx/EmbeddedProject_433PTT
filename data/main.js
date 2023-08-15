@@ -129,12 +129,11 @@ function updateFormWithData(data) {
    startFreqInput.value = data.startFrequency;
    freqStepInput.value = data.step;
 }
-let on = 1;
+let on = 0;
 function fetchDataAndUpdateForm() {
    fetch(`/get/scan?on=${on}`)
       .then(response => response.json())
       .then(data => {
-         on = 1 - on;
          updateFormWithData(data);
          console.log('scan data from server: ', data);
       })
@@ -148,9 +147,15 @@ function fetchDataAndUpdateForm() {
 let intervalId = null;
 const scanButton = document.getElementById("scanButton");
 scanButton.addEventListener("click", function (event) {
-   scanButton.textContent = scanButton.textContent === "SCAN ON" ? "SCAN OFF" : "SCAN ON";
+   on = 1 - on;
+   scanButton.textContent = scanButton.textContent === "SCAN OFF" ? "SCAN ON" : "SCAN OFF";
    event.preventDefault();
-   intervalId = setInterval(fetchDataAndUpdateForm, 1000);
+   if (on === 1) {
+      intervalId = setInterval(fetchDataAndUpdateForm, 1000);
+   } else {
+      clearInterval(intervalId);
+      fetchDataAndUpdateForm();
+   }
 });
 
 window.addEventListener('beforeunload', () => {
