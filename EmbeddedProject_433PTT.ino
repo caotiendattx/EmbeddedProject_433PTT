@@ -58,6 +58,8 @@ void handlePostScan(AsyncWebServerRequest *request, uint8_t *data, size_t len, s
   JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
   
   if (root.success()) {
+      tool.changeState(SCAN_STATE);
+      tool.changeDriver(ELECHOUSE_CC1101_DRIVER);
     if (root.containsKey("scan_modulation")) {
       tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["scan_modulation"].as<int>()); 
       Serial.println("Modulation: " + String(root["scan_modulation"].as<int>()));
@@ -77,6 +79,7 @@ void handlePostScan(AsyncWebServerRequest *request, uint8_t *data, size_t len, s
   }
 }
 void handleGetScanRSSI(AsyncWebServerRequest *request) {
+  tool.changeState(SCAN_STATE);
   jsonBuffer.clear();
   // create an empty array
   JsonArray& rssiData = jsonBuffer.createArray();
@@ -87,7 +90,47 @@ void handleGetScanRSSI(AsyncWebServerRequest *request) {
   rssiData.printTo(response);
   request->send(200, "application/json", response);
 }
+void handlePostScanOFF(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+  DynamicJsonBuffer jsonDynamicBuffer;
+  JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
+  
+  if (root.success()) {
+      tool.changeState(IDLE_STATE);
+    if (root.containsKey("scan_off")) {
+      
+      Serial.println("Scan: OFF");
+    }
+    request->send(200, "text/plain", "");
+    tool.cc1101UpdateConfig();
+  } else {
+    request->send(404, "text/plain", "");
+  }
+}
 
+//TX RX Config
+void handlePostConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+  DynamicJsonBuffer jsonDynamicBuffer;
+  JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
+  
+  if (root.success()) {
+    if (root.containsKey("scan_modulation")) {
+      tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["scan_modulation"].as<int>()); 
+      Serial.println("Modulation: " + String(root["scan_modulation"].as<int>()));
+    }
+    if (root.containsKey("scan_start_frequency")) {
+      tool._RFSpecs.scan_start_Frequency = static_cast<_433PTT_MODULATIONS>(root["scan_start_frequency"].as<int>());
+      Serial.println("Start Frequency: " + String(root["scan_start_frequency"].as<int>()));
+    }
+    if (root.containsKey("scan_step")) {
+      tool._RFSpecs.scan_increasement = static_cast<_433PTT_MODULATIONS>(root["scan_step"].as<int>());
+      Serial.println("Start Frequency: " + String(root["scan_step"].as<int>()));
+    }
+    request->send(200, "text/plain", "");
+    tool.cc1101UpdateConfig();
+  } else {
+    request->send(404, "text/plain", "");
+  }
+}
 void setUpRoutes(){
   if(!SPIFFS.begin(true)){
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -107,12 +150,14 @@ void setUpRoutes(){
 
   server.on("/on", HTTP_GET, handleGetView);
 
- 
+  server.on("/scan", HTTP_GET, handleGetScanRSSI);
+
   
   server.on("/postDataRF", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostBodySend);
 
 
   server.on("/post/scan/submit", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScan);
+  server.on("/post/scan/off", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScanOFF);
   
   server.begin();
 }
@@ -160,11 +205,6 @@ void handle_RX_State(){
     }
   }
 }
-void handle_Scan_State(){
-  tool.getRSSIcc1101(tool._RFSpecs.scan_start_Frequency, tool._RFSpecs.scan_increasement);
-  //TODO: DATA TO FE
-  // tool.RSSIScanData[i];
-}
 void embedded_app(){
 
     switch(tool.getState()){
@@ -182,7 +222,7 @@ void embedded_app(){
 
     break;
     case SCAN_STATE:
-      handle_Scan_State();
+      tool.getRSSIcc1101(tool._RFSpecs.scan_start_Frequency, tool._RFSpecs.scan_increasement);
     break;
     case JAMMING_STATE:
       tool.signalJamming();
