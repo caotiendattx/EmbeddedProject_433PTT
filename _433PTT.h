@@ -77,6 +77,8 @@ struct RF_Specs{
   uint8_t PRE;
   uint8_t PQT;
   bool appendStatus;
+  float scan_start_Frequency;
+  float scan_increasement;
 };
 class _433PTT
 {
@@ -121,6 +123,8 @@ public:
   byte ccreceivingbuffer[CCBUFFERSIZE] = {0};
   // buffer for hex to ascii conversions 
   byte textbuffer[BUF_LENGTH];
+  //SCAN
+
 private:
   ELECHOUSE_CC1101 _cc1101;
   RCSwitch mySwitch;
@@ -130,4 +134,3 @@ private:
 
 
 //  -- END OF FILE --
-
