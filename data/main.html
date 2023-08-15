@@ -14,8 +14,8 @@
    <nav>
       <ul>
          <li data-target="scanRF"><a class="active" href="#scanRF">SCAN</a></li>
-         <li data-target="tx"><a href="#tx">TX</a></li>
-         <li data-target="rx"><a href="#rx">RX</a></li>
+         <li data-target="tx"><a href="#tx">TX/RX</a></li>
+         <!-- <li data-target="rx"><a href="#rx">RX</a></li> -->
          <li data-target="jamming"><a href="#jamming">JAMMING</a></li>
       </ul>
    </nav>
@@ -65,7 +65,7 @@
 
                   </div>
                   <div class="rf-config">
-                     <form action="">
+                     <form action="" id="modulation-form">
                         <label style="font-weight: bold">Modulation: </label> <br>
                         <input type="radio" id="2-fsk" name="modulation" value="HTML">
                         <label for="html">2-FSK</label><br>
@@ -78,7 +78,7 @@
                         <input type="radio" id="msk" name="modulation" value="JavaScript">
                         <label for="javascript">MSK</label> <br>
                         <label for="start-freq" style="font-weight: bold">Start Frequency:</label><br>
-                        <input type="text" id="start-freq" name="start-freq" value="315MHz"><br>
+                        <input type="text" id="start-freq" name="start-freq" value="315"><br>
                         <label for="freq-step" style="font-weight: bold">Step:</label><br>
                         <input type="text" id="freq-step" name="freq-step" value="0.01"><br>
                         <input type="submit" value="Submit" class="btn"
@@ -89,7 +89,7 @@
             </div>
          </div>
          <div class="btn-container">
-            <button class="btn" id="btnscanRF">SCAN</button>
+            <button class="btn" id="scanButton">SCAN</button>
          </div>
       </div>
    </section>
@@ -99,7 +99,7 @@
             <div class="rx-container">
                <div class="main-rx-content">
                   <!-- <div class="rx-config"> -->
-                  <form action="" class="rx-config">
+                  <form action="" id="tx-rx-config-form" class="rx-config">
                      <div class="rx-col1">
                         <label for="modulation">Modulation:</label>
                         <select id="modulation" name="modulation">
@@ -276,196 +276,8 @@
             </div>
          </div>
          <div class="btn-container">
-            <button class="btn" id="btnSendRF">Execute</button>
-            <button class="btn">Next</button>
-         </div>
-      </div>
-   </section>
-   <section id="rx">
-      <div class="section-container">
-         <div class="main-display">
-            <div class="rx-container">
-               <div class="main-rx-content">
-                  <!-- <div class="rx-config"> -->
-                  <form action="" class="rx-config">
-                     <div class="rx-col1">
-                        <label for="modulation">Modulation:</label>
-                        <select id="modulation" name="modulation">
-                           <option value="2-FSK">2-FSK</option>
-                           <option value="GFSK">GFSK</option>
-                           <option value="ASK/OOK" selected>ASK/OOK</option>
-                           <option value="4-FSK">4-FSK</option>
-                           <option value="MSK">MSK</option>
-                        </select><br />
-
-                        <label for="basicFrequency">Frequency (MHz):</label>
-                        <input type="number" id="basicFrequency" name="basicFrequency" step="0.01" min="300" max="928"
-                           value="433.92" /><br />
-
-                        <label for="frequencyDeviation">Frequency Deviation (kHz):</label>
-                        <input type="number" id="frequencyDeviation" name="frequencyDeviation" step="0.01" min="1.58"
-                           max="380.85" value="47.60" /><br />
-
-                        <label for="channelNumber">Channel Number:</label>
-                        <input type="number" id="channelNumber" name="channelNumber" step="1" min="0" max="255"
-                           value="0" /><br />
-
-                        <label for="channelSpacing">Channel Spacing (kHz):</label>
-                        <input type="number" id="channelSpacing" name="channelSpacing" step="0.01" min="25.39"
-                           max="405.45" value="199.95" /><br />
-
-                        <label for="receiveBW">Receive Bandwidth (kHz):</label>
-                        <input type="number" id="receiveBW" name="receiveBW" step="0.01" min="58.03" max="812.50"
-                           value="812.50" /><br />
-
-                        <label for="dataRate">Data Rate (kBaud):</label>
-                        <input type="number" id="dataRate" name="dataRate" step="0.01" min="0.02" max="1621.83"
-                           value="99.97" /><br />
-
-                        <label for="power">Set TxPower:</label>
-                        <select id="power" name="power">
-                           <option value="-30">-30 dBm</option>
-                           <option value="-20">-20 dBm</option>
-                           <option value="-15">-15 dBm</option>
-                           <option value="-10">-10 dBm</option>
-                           <option value="-6">-6 dBm</option>
-                           <option value="0">0 dBm</option>
-                           <option value="5">5 dBm</option>
-                           <option value="7">7 dBm</option>
-                           <option value="10">10 dBm</option>
-                           <option value="11">11 dBm</option>
-                           <option value="12" selected>12 dBm</option>
-                        </select><br />
-                        <label for="syncMode">Set Sync Mode:</label>
-                        <select id="syncMode" name="syncMode">
-                           <option value="0">0 - No preamble/sync</option>
-                           <option value="1">1 - 16 sync word bits detected</option>
-                           <option value="2" selected>
-                              2 - 16/16 sync word bits detected
-                           </option>
-                           <option value="3">3 - 30/32 sync word bits detected</option>
-                           <option value="4">
-                              4 - No preamble/sync, carrier-sense threshold
-                           </option>
-                           <option value="5">
-                              5 - 15/16 + carrier-sense above threshold
-                           </option>
-                           <option value="6">
-                              6 - 16/16 + carrier-sense above threshold
-                           </option>
-                           <option value="7">
-                              7 - 30/32 + carrier-sense above threshold
-                           </option>
-                        </select><br />
-                        <label for="syncWordHigh">Sync Word High:</label>
-                        <input type="text" id="syncWordHigh" name="syncWordHigh" value="211" /><br />
-                     </div>
-                     <div class="rx-col-2">
-
-                        <label for="syncWordLow">Sync Word Low:</label>
-                        <input type="text" id="syncWordLow" name="syncWordLow" value="145" /><br />
-
-                        <label for="adrCheck">Address Check Configuration:</label>
-                        <select id="adrCheck" name="adrCheck">
-                           <option value="0" selected>No address check</option>
-                           <option value="1">Address check, no broadcast</option>
-                           <option value="2">
-                              Address check, 0 broadcast
-                           </option>
-                           <option value="3">
-                              Address check, 0 and 255 broadcast
-                           </option>
-                        </select><br />
-
-                        <label for="address">Set Address:</label>
-                        <input type="text" id="address" name="address" value="0" /><br />
-
-                        <label for="whitening">Data Whitening:</label>
-                        <select id="whitening" name="whitening">
-                           <option value="0">Enable</option>
-                           <option value="1" selected>Disable</option>
-                        </select><br />
-
-                        <label for="pktFormat">Set Packet Format:</label>
-                        <select id="pktFormat" name="pktFormat">
-                           <option value="0" selected>Normal mode</option>
-                           <option value="1">Synchronous serial mode</option>
-                           <option value="2">Random TX mode</option>
-                           <option value="3">Asynchronous serial mode</option>
-                        </select><br />
-
-                        <label for="lengthConfig">Set Length Configuration:</label>
-                        <select id="lengthConfig" name="lengthConfig">
-                           <option value="0">Fixed packet length mode</option>
-                           <option value="1" selected>Variable packet length mode</option>
-                           <option value="2">Infinite packet length mode</option>
-                           <option value="3">Reserved</option>
-                        </select><br />
-                        <label for="packetLength">Set Packet Length:</label>
-                        <input type="number" id="packetLength" name="packetLength" min="0" max="255" value="0" /><br />
-                        <label for="crc">Set CRC:</label>
-                        <select id="crc" name="crc">
-                           <option value="1">Enabled</option>
-                           <option value="0" selected>Disabled</option>
-                        </select><br />
-
-                     </div>
-                     <div class="rx-col-3">
-                        <label for="crcaf">Enable Automatic Flush of RX FIFO:</label>
-                        <select id="crcaf" name="crcaf">
-                           <option value="1">Enabled</option>
-                           <option value="0" selected>Disabled</option>
-                        </select><br />
-                        <label for="dcfilteroff">Disable Digital DC Blocking Filter:</label>
-                        <select id="dcfilteroff" name="dcfilteroff">
-                           <option value="1">Disable (current optimized)</option>
-                           <option value="0">
-                              Enable (better sensitivity)
-                           </option>
-                        </select><br />
-                        <label for="manchester">Enable Manchester Encoding/Decoding:</label>
-                        <select id="manchester" name="manchester">
-                           <option value="0">Disable</option>
-                           <option value="1">Enable</option>
-                        </select><br />
-                        <label for="fec">Enable Forward Error Correction (FEC):</label>
-                        <select id="fec" name="fec">
-                           <option value="0">Disable</option>
-                           <option value="1">Enable</option>
-                        </select><br />
-
-                        <label for="pre">Set Preamble:</label>
-                        <select id="pre" name="pre">
-                           <option value="0" selected>2</option>
-                           <option value="1">3</option>
-                           <option value="2">4</option>
-                           <option value="3">6</option>
-                           <option value="4">8</option>
-                           <option value="5">12</option>
-                           <option value="6">16</option>
-                           <option value="7">24</option>
-                        </select><br />
-                        <label for="pqt">Set Preamble Quality Threshold:</label>
-                        <input type="number" id="pqt" name="pqt" min="0" max="255" value="0" /><br />
-
-                        <label for="appendstatus">Set Append Status:</label>
-                        <select id="appendstatus" name="appendstatus">
-                           <option value="0">Disable</option>
-                           <option value="1">Enable</option>
-                        </select><br />
-                        <input type="submit" class="btn" style="padding: 0.5em;" value="Submit">
-                     </div>
-                  </form>
-                  <!-- </div> -->
-                  <div class="rx-data">
-                     <textarea name="" id="" cols="140%" rows="5%"></textarea>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div class="btn-container">
-            <button class="btn">RX ON</button>
-            <button class="btn">STOP</button>
+            <button class="btn" id="sendRFButton">Send RF</button>
+            <button class="btn" id="receiveRFButton">Receive RF</button>
          </div>
       </div>
    </section>
