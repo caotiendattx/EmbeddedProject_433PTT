@@ -5,9 +5,8 @@
 #include "SPIFFS.h"   //library for reading file
 #include <ArduinoJson.h> //library for formating as JSON - version 5.13
 AsyncWebServer server(80);
-StaticJsonBuffer<200> jsonBuffer;
-StaticJsonBuffer<200> jsonBuffer2;
-
+StaticJsonBuffer<2000> jsonBuffer;
+StaticJsonBuffer<2000> jsonBuffer2;
 String jsonString;
 _433PTT tool;
 void setupAPMode() {
@@ -17,40 +16,6 @@ void setupAPMode() {
   Serial.print("Access point IP address: ");
   Serial.println(WiFi.softAPIP()); // Print the IP address of the access point
 }
-
-//void handleGetView(AsyncWebServerRequest *request) {
-//  jsonBuffer.clear();
-//  JsonObject& object = jsonBuffer.createObject();
-//  // {
-//  //   "hello": "world";
-//  // }
-//  object["hello"] = "world";
-//  String response;
-//  object.printTo(response);
-//  request->send(200, "application/json", response);
-//}
-
-// example data to post:
-// {
-//   "key1": "value1",
-//   "key2": "value2"
-// }
-//void handlePostBodySend(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-//      DynamicJsonBuffer jsonDynamicBuffer;
-//      JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
-//      if (root.success()) {
-//        if (root.containsKey("key1")) {
-//          Serial.println(root["key"].asString());
-//        }
-//        if (root.containsKey("key2")) {
-//          Serial.println(root["key2"].asString());
-//        }
-//        request->send(200, "text/plain", "");
-//      } else {
-//        request->send(404, "text/plain", "");
-//      }
-//  }
-
 //  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN/////////////////
 void handlePostScanSubmit(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
   DynamicJsonBuffer jsonDynamicBuffer;
@@ -223,12 +188,17 @@ void handleJamConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len, 
   if (root.success()) {
       tool.changeDriver(ELECHOUSE_CC1101_DRIVER);
       tool.cc1101UpdateConfig();
-    if (root.containsKey("RFData")) {
-      char* ptrBuffer_1 = new char[200];
-      memcpy(ptrBuffer_1, root["RFData"].asString(), strlen(root["RFData"].asString()));
-      tool.ELECHOUSE_CC1101_DRIVER_TX(ptrBuffer_1);
-      delete [] ptrBuffer_1;
-      ptrBuffer_1 = NULL;
+    if (root.containsKey("jamming-freq-1")) {
+        tool.jam_freq[0] = root["jamming-freq-1"].as<float>();
+    }
+    if (root.containsKey("jamming-freq-2")) {
+        tool.jam_freq[0] = root["jamming-freq-2"].as<float>();
+    }
+    if (root.containsKey("jamming-freq-3")) {
+        tool.jam_freq[0] = root["jamming-freq-3"].as<float>();
+    }
+    if (root.containsKey("jamming-freq-4")) {
+        tool.jam_freq[0] = root["jamming-freq-4"].as<float>();
     }
     request->send(200, "text/plain", "Send RF: OK");
   } else {
