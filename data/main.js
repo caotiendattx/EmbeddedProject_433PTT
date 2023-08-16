@@ -209,7 +209,7 @@ let isJammingClick = 0;
 const JammingButton = document.getElementById('jammingButton');
 JammingButton.addEventListener("click", function () {
    isJammingClick = 1 - isJammingClick;
-   JammingButton.textContent = JammingButton.textContent === "START" ? "STOP" : "START";
+   // JammingButton.textContent = JammingButton.textContent === "START" ? "STOP" : "START";
    // JammingButton.textContext = isJammingClick === 1 ? "STOP" : "START";
    const freqInputs = document.querySelectorAll(".jamming-col input[type='number']");
    const frequencies = Array.from(freqInputs).map(input => parseFloat(input.value));
