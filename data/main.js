@@ -139,16 +139,18 @@ function updateFormWithData(response) {
    let freqArrayString = response.freqArray;
    // data = JSON.parse(freqArrayString);
    data = response.freqArray;
-   data = data.map((item) => item * (-1));
+   // data = data.map((item) => item * (-1));
    console.log('data: ', data);
    barCount = data.length;
    barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
    // maxValue = Math.max(...data);
-   maxValue = 128;
+   maxValue = 0;
+   minValue - 128;
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
    for (let i = 0; i < barCount; i++) {
-      barHeight = (data[i] / maxValue) * canvas.height;
+      // barHeight = (data[i] / maxValue) * canvas.height;
+      barHeight = ((data[i] - minValue) / (maxValue - minValue)) * canvas.height;
       x = i * (barWidth * 2); // Adjust the position based on barWidth
       y = canvas.height - barHeight;
 
