@@ -129,13 +129,13 @@ const modulationOptions = form.elements["modulation"];
 const startFreqInput = document.getElementById("start-freq");
 const freqStepInput = document.getElementById("freq-step");
 
-function updateFormWithData(data) {
+function updateFormWithData(response) {
    // modulationOptions.value = data.modulation;
    // startFreqInput.value = data.startFrequency;
    // freqStepInput.value = data.step;
    canvas = document.getElementById('graphCanvas');
    ctx = canvas.getContext('2d');
-   let freqArrayString = data.freqArray;
+   let freqArrayString = response;
    data = JSON.parse(freqArrayString);
    barCount = data.length;
    barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
