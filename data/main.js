@@ -26,13 +26,18 @@ function sendDataToServer(url, data) {
       },
       body: JSON.stringify(data)
    })
-      .then(response => response.json())
-      .then(data => {
-         console.log("Response from server:", data);
-      })
-      .catch(error => {
-         console.error("Error:", error);
-      });
+   .then(response => {
+      if (!response.ok) {
+         throw new Error(`Server returned status: ${response.status}`);
+      }
+      return response.json();
+   })
+   .then(data => {
+      console.log("Response from server:", data);
+   })
+   .catch(error => {
+      console.error("Error:", error);
+   });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -206,22 +211,22 @@ receiveRFRequest.addEventListener("click", function (event) {
    sendDataToServer('/post/receive/frequency', globalRFData);
 });
 
-function onViewRF() {
-   fetch('/on')
-      .then(response => {
-         if (!response.ok) {
-            throw new Error('Network response was not ok');
-         }
-         return response.json()
-      })
-      .then(data => {
-         console.log('response value onViewRF: ', data);
-      })
-      .catch(error => {
-         console.error('Error:', error);
-      });
-}
-document.getElementById('btnViewRF').addEventListener('click', onViewRF)
+// function onViewRF() {
+//    fetch('/on')
+//       .then(response => {
+//          if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//          }
+//          return response.json()
+//       })
+//       .then(data => {
+//          console.log('response value onViewRF: ', data);
+//       })
+//       .catch(error => {
+//          console.error('Error:', error);
+//       });
+// }
+// document.getElementById('btnViewRF').addEventListener('click', onViewRF)
 
 
 function onSendRF() {
@@ -247,7 +252,7 @@ function onSendRF() {
          console.error('Error:', error);
       });
 }
-document.getElementById('btnSendRF').addEventListener('click', onSendRF)
+document.getElementById('sendRFButton').addEventListener('click', onSendRF)
 
 function onJamming() {
    const dataToSend = {
