@@ -30,9 +30,9 @@
                      <canvas id="graphCanvas" width="450%" height="200%"></canvas>
 
                      <script>
-                        const canvas = document.getElementById('graphCanvas');
-                        const ctx = canvas.getContext('2d');
-                        const data = [91, 68, 5, 34, 15, 47, 58, 3, 56, 122,
+                        let canvas = document.getElementById('graphCanvas');
+                        let ctx = canvas.getContext('2d');
+                        let data = [91, 68, 5, 34, 15, 47, 58, 3, 56, 122,
                            73, 48, 105, 20, 69, 8, 100, 16, 65, 92,
                            79, 25, 54, 82, 44, 4, 95, 99, 13, 52,
                            26, 74, 63, 98, 1, 66, 113, 86, 40, 9,
@@ -47,16 +47,16 @@
 
                         ];
 
-                        const barCount = data.length;
-                        const barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
-                        const maxValue = Math.max(...data);
+                        let barCount = data.length;
+                        let barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
+                        let maxValue = Math.max(...data);
 
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                         for (let i = 0; i < barCount; i++) {
-                           const barHeight = (data[i] / maxValue) * canvas.height;
-                           const x = i * (barWidth * 2); // Adjust the position based on barWidth
-                           const y = canvas.height - barHeight;
+                           let barHeight = (data[i] / maxValue) * canvas.height;
+                           let x = i * (barWidth * 2); // Adjust the position based on barWidth
+                           let y = canvas.height - barHeight;
 
                            ctx.fillStyle = 'blue';
                            ctx.fillRect(x, y, barWidth, barHeight);

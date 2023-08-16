@@ -128,6 +128,37 @@ function updateFormWithData(data) {
    modulationOptions.value = data.modulation;
    startFreqInput.value = data.startFrequency;
    freqStepInput.value = data.step;
+   canvas = document.getElementById('graphCanvas');
+   const ctx = canvas.getContext('2d');
+   const data = [91, 68, 5, 34, 15, 47, 58, 3, 56, 122,
+      73, 48, 105, 20, 69, 8, 100, 16, 65, 92,
+      79, 25, 54, 82, 44, 4, 95, 99, 13, 52,
+      26, 74, 63, 98, 1, 66, 113, 86, 40, 9,
+      116, 21, 117, 97, 19, 36, 83, 81, 39, 89,
+      77, 64, 124, 51, 29, 94, 123, 60, 112, 18,
+      127, 24, 71, 43, 59, 101, 53, 10, 76, 61,
+      31, 50, 88, 67, 38, 75, 96, 6, 85, 84,
+      110, 28, 32, 106, 102, 35, 45, 107, 78, 22,
+      11, 72, 30, 41, 70, 114, 37, 109, 115, 33,
+      49, 80, 42, 121, 93, 117, 111, 119, 87, 126,
+      46, 55, 62, 120, 14, 117, 90, 103, 27, 117
+
+   ];
+
+   const barCount = data.length;
+   const barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
+   const maxValue = Math.max(...data);
+
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+   for (let i = 0; i < barCount; i++) {
+      const barHeight = (data[i] / maxValue) * canvas.height;
+      const x = i * (barWidth * 2); // Adjust the position based on barWidth
+      const y = canvas.height - barHeight;
+
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(x, y, barWidth, barHeight);
+   }
 }
 let on = 0;
 function fetchDataAndUpdateForm() {
