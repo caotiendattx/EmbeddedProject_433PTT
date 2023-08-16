@@ -26,18 +26,18 @@ function sendDataToServer(url, data) {
       },
       body: JSON.stringify(data)
    })
-   .then(response => {
-      if (!response.ok) {
-         throw new Error(`Server returned status: ${response.status}`);
-      }
-      return response.json();
-   })
-   .then(data => {
-      console.log("Response from server:", data);
-   })
-   .catch(error => {
-      console.error("Error:", error);
-   });
+      .then(response => {
+         if (!response.ok) {
+            throw new Error(`Server returned status: ${response.status}`);
+         }
+         return response.json();
+      })
+      .then(data => {
+         console.log("Response from server:", data);
+      })
+      .catch(error => {
+         console.error("Error:", error);
+      });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -134,32 +134,19 @@ function updateFormWithData(data) {
    startFreqInput.value = data.startFrequency;
    freqStepInput.value = data.step;
    canvas = document.getElementById('graphCanvas');
-   const ctx = canvas.getContext('2d');
-   const data = [91, 68, 5, 34, 15, 47, 58, 3, 56, 122,
-      73, 48, 105, 20, 69, 8, 100, 16, 65, 92,
-      79, 25, 54, 82, 44, 4, 95, 99, 13, 52,
-      26, 74, 63, 98, 1, 66, 113, 86, 40, 9,
-      116, 21, 117, 97, 19, 36, 83, 81, 39, 89,
-      77, 64, 124, 51, 29, 94, 123, 60, 112, 18,
-      127, 24, 71, 43, 59, 101, 53, 10, 76, 61,
-      31, 50, 88, 67, 38, 75, 96, 6, 85, 84,
-      110, 28, 32, 106, 102, 35, 45, 107, 78, 22,
-      11, 72, 30, 41, 70, 114, 37, 109, 115, 33,
-      49, 80, 42, 121, 93, 117, 111, 119, 87, 126,
-      46, 55, 62, 120, 14, 117, 90, 103, 27, 117
-
-   ];
-
-   const barCount = data.length;
-   const barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
-   const maxValue = Math.max(...data);
+   ctx = canvas.getContext('2d');
+   let freqArrayString = data.freqArray;
+   data = JSON.parse(freqArrayString);
+   barCount = data.length;
+   barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
+   maxValue = Math.max(...data);
 
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
    for (let i = 0; i < barCount; i++) {
-      const barHeight = (data[i] / maxValue) * canvas.height;
-      const x = i * (barWidth * 2); // Adjust the position based on barWidth
-      const y = canvas.height - barHeight;
+      barHeight = (data[i] / maxValue) * canvas.height;
+      x = i * (barWidth * 2); // Adjust the position based on barWidth
+      y = canvas.height - barHeight;
 
       ctx.fillStyle = 'blue';
       ctx.fillRect(x, y, barWidth, barHeight);
@@ -179,7 +166,6 @@ function fetchDataAndUpdateForm() {
 }
 
 // Fetch and update form every second
-
 let intervalId = null;
 const scanButton = document.getElementById("scanButton");
 scanButton.addEventListener("click", function (event) {
@@ -204,118 +190,21 @@ sendRFRequest.addEventListener("click", function (event) {
    sendDataToServer('/post/send/frequency', globalRFData);
 });
 
-
 const receiveRFRequest = document.getElementById("receiveRFButton");
 receiveRFRequest.addEventListener("click", function (event) {
    event.preventDefault();
    sendDataToServer('/post/receive/frequency', globalRFData);
 });
 
-// function onViewRF() {
-//    fetch('/on')
-//       .then(response => {
-//          if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//          }
-//          return response.json()
-//       })
-//       .then(data => {
-//          console.log('response value onViewRF: ', data);
-//       })
-//       .catch(error => {
-//          console.error('Error:', error);
-//       });
-// }
-// document.getElementById('btnViewRF').addEventListener('click', onViewRF)
-
-
-function onSendRF() {
-   console.log("send RF")
-   const dataToSend = {
-      key: 'value'
+let isJammingClick = false;
+const JammingButton = document.getElementById('jammingButton');
+JammingButton.addEventListener("click", function () {
+   JammingButton.textContext = isJammingClick === false ? "STOP" : "START";
+   isJammingClick = !isJammingClick;
+   const freqInputs = document.querySelectorAll(".jamming-col input[type='number']");
+   const frequencies = Array.from(freqInputs).map(input => parseInt(input.value));
+   const requestData = {
+      jamming_freqs: frequencies
    };
-
-   fetch('/postDataRF', {
-      method: 'POST',
-      headers: {
-         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataToSend)
-   })
-      .then(response => response.text())
-      .then(data => {
-         // Process the response data
-         console.log('response value onSendRF: ', data);
-      })
-      .catch(error => {
-         // Handle any errors that occurred during the fetch
-         console.error('Error:', error);
-      });
-}
-document.getElementById('sendRFButton').addEventListener('click', onSendRF)
-
-function onJamming() {
-   const dataToSend = {
-      key: 'value'
-   };
-
-   fetch('http://your-esp8266-server-url/sendRF', {
-      method: 'POST',
-      headers: {
-         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataToSend)
-   })
-      .then(response => response.json())
-      .then(data => {
-         // Process the response data
-         console.log(data);
-      })
-      .catch(error => {
-         // Handle any errors that occurred during the fetch
-         console.error('Error:', error);
-      });
-}
-function onSignal() {
-   const dataToSend = {
-      key: 'value'
-   };
-
-   fetch('http://your-esp8266-server-url/sendRF', {
-      method: 'POST',
-      headers: {
-         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataToSend)
-   })
-      .then(response => response.json())
-      .then(data => {
-         // Process the response data
-         console.log(data);
-      })
-      .catch(error => {
-         // Handle any errors that occurred during the fetch
-         console.error('Error:', error);
-      });
-}
-
-// let intervalId; // Define a variable to store the interval ID
-// function fetchDataFromServer() {
-//    fetch('')
-//       .then(response => response.json())
-//       .then(data => {
-//          // Process the received data
-//          console.log(data);
-//       })
-//       .catch(error => {
-//          // Handle any errors that occurred during the fetch
-//          console.error('Error:', error);
-//       });
-// }
-// // Start fetching data every 1 seconds
-// intervalId = setInterval(fetchDataFromServer, 1000);
-
-// //clean interval
-// window.addEventListener('beforeunload', () => {
-//    clearInterval(intervalId);
-// });
+   sendDataToServer('/post/jamming', requestData);
+})

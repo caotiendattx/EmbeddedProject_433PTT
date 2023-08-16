@@ -289,51 +289,29 @@
                   <div class="jamming-header">
                      <div class="jamming-col">
                         <label for="jamming-freq-1" style="font-weight: bold;">Frequency: </label>
-                        <input type="number" id="jamming-freq-1" name="pqt" min="0" max="255" value="0" /><br />
+                        <input type="number" id="jamming-freq-1" name="pqt" min="0" max="1000" value="315" /><br />
                      </div>
                      <div class="jamming-col">
                         <label for="jamming-freq-2" style="font-weight: bold;">Frequency: </label>
-                        <input type="number" id="jamming-freq-2" name="pqt" min="0" max="255" value="0" /><br />
+                        <input type="number" id="jamming-freq-2" name="pqt" min="0" max="1000" value="0" /><br />
                      </div>
                      <div class="jamming-col">
                         <label for="jamming-freq-3" style="font-weight: bold;">Frequency: </label>
-                        <input type="number" id="jamming-freq-3" name="pqt" min="0" max="255" value="0" /><br />
+                        <input type="number" id="jamming-freq-3" name="pqt" min="0" max="1000" value="0" /><br />
                      </div>
                      <div class="jamming-col">
                         <label for="jamming-freq-4" style="font-weight: bold;">Frequency: </label>
-                        <input type="number" id="jamming-freq-4" name="pqt" min="0" max="255" value="0" /><br />
+                        <input type="number" id="jamming-freq-4" name="pqt" min="0" max="1000" value="0" /><br />
                      </div>
                   </div>
                   <div class="jamming-middle">
                      JAMMING
                   </div>
                   <div class="jamming-btn-container">
-                     <button class="jamming-btn" id="startStopButton" onclick="toggleStartStop()">START</button>
+                     <button class="jamming-btn" id="jammingButton">START</button>
                   </div>
                </div>
             </div>
-         </div>
-         <div class="btn-container">
-            <script>
-               let isRunning = false;
-
-               function toggleStartStop() {
-                  const button = document.getElementById("startStopButton");
-
-                  if (isRunning) {
-                     button.textContent = "Start";
-                     isRunning = false;
-                     // Add code here to stop any ongoing process
-                  } else {
-                     button.textContent = "Stop";
-                     isRunning = true;
-                     // Add code here to start a process
-                  }
-               }
-            </script>
-            <!-- <button class="btn" id="startStopButton" onclick="toggleStartStop()">
-               Start
-            </button> -->
          </div>
       </div>
    </section>
