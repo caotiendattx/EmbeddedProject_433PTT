@@ -135,7 +135,7 @@ function updateFormWithData(response) {
    // freqStepInput.value = data.step;
    canvas = document.getElementById('graphCanvas');
    ctx = canvas.getContext('2d');
-   let freqArrayString = response;
+   let freqArrayString = response.freqArray;
    data = JSON.parse(freqArrayString);
    barCount = data.length;
    barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
@@ -196,15 +196,15 @@ receiveRFRequest.addEventListener("click", function (event) {
    sendDataToServer('/post/receive/frequency', globalRFData);
 });
 
-let isJammingClick = false;
+let isJammingClick = 0;
 const JammingButton = document.getElementById('jammingButton');
 JammingButton.addEventListener("click", function () {
-   JammingButton.textContext = isJammingClick === false ? "STOP" : "START";
-   isJammingClick = !isJammingClick;
+   isJammingClick = 1 - isJammingClick;
+   JammingButton.textContext = isJammingClick === 1 ? "STOP" : "START";
    const freqInputs = document.querySelectorAll(".jamming-col input[type='number']");
    const frequencies = Array.from(freqInputs).map(input => parseInt(input.value));
    const requestData = {
       jamming_freqs: frequencies
    };
-   sendDataToServer('/post/jamming', requestData);
+   sendDataToServer(`/post/jamming?start=${isJammingClick}`, requestData);
 })
