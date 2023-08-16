@@ -130,9 +130,9 @@ const startFreqInput = document.getElementById("start-freq");
 const freqStepInput = document.getElementById("freq-step");
 
 function updateFormWithData(data) {
-   modulationOptions.value = data.modulation;
-   startFreqInput.value = data.startFrequency;
-   freqStepInput.value = data.step;
+   // modulationOptions.value = data.modulation;
+   // startFreqInput.value = data.startFrequency;
+   // freqStepInput.value = data.step;
    canvas = document.getElementById('graphCanvas');
    ctx = canvas.getContext('2d');
    let freqArrayString = data.freqArray;
