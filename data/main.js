@@ -143,8 +143,8 @@ function updateFormWithData(response) {
    console.log('data: ', data);
    barCount = data.length;
    barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
-   maxValue = Math.max(...data);
-
+   // maxValue = Math.max(...data);
+   maxValue = 128;
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
    for (let i = 0; i < barCount; i++) {
