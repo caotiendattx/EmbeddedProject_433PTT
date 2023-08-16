@@ -135,8 +135,12 @@ function updateFormWithData(response) {
    // freqStepInput.value = data.step;
    canvas = document.getElementById('graphCanvas');
    ctx = canvas.getContext('2d');
+   console.log(response);
    let freqArrayString = response.freqArray;
-   data = JSON.parse(freqArrayString);
+   // data = JSON.parse(freqArrayString);
+   data = response.freqArray;
+   data = data.map((item) => item * (-1));
+   console.log('data: ', data);
    barCount = data.length;
    barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
    maxValue = Math.max(...data);
