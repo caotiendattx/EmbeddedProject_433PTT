@@ -6,6 +6,8 @@
 #include <ArduinoJson.h> //library for formating as JSON - version 5.13
 AsyncWebServer server(80);
 StaticJsonBuffer<200> jsonBuffer;
+StaticJsonBuffer<200> jsonBuffer2;
+
 String jsonString;
 _433PTT tool;
 void setupAPMode() {
@@ -275,12 +277,15 @@ void setUpRoutes(){
 //      on = onParam.toInt() == 1;
       tool.changeState(SCAN_STATE);
       jsonBuffer.clear();
-      JsonArray& rssiData = jsonBuffer.createArray();
+      jsonBuffer2.clear();
+      JsonObject& object = jsonBuffer.createObject();
+      JsonArray& rssiData = jsonBuffer2.createArray();
       for(uint8_t i = 0; i < (sizeof(tool.RSSIScanData)/sizeof(tool.RSSIScanData[0])); i++){
         rssiData.add(tool.RSSIScanData[i]);
       }
+      object["freqArray"] = rssiData;
       String response;
-      rssiData.printTo(response);
+      object.printTo(response);
       request->send(200, "application/json", response);
     });
 ///////////////////////////////////ReceiveRF//////////////////////////////////////////////////////////
