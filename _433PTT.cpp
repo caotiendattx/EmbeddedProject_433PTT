@@ -147,12 +147,25 @@ bool _433PTT::getConnectionStatus(){
 }
 
 void _433PTT::signalJamming(){
+  _cc1101.setMHZ(jam_freq[0]);
   randomSeed(analogRead(0));
   for (int i = 0; i<60; i++)
     {
         ccsendingbuffer[i] = (byte)random(255);
     };
   _cc1101.SendData(ccsendingbuffer,60);
+  if(jam_freq[0] != jam_freq[1] && jam_freq[1] != 0){
+      _cc1101.setMHZ(jam_freq[1]);
+      _cc1101.SendData(ccsendingbuffer,60);
+  }
+  if(jam_freq[0] != jam_freq[2] && jam_freq[2] != 0){
+      _cc1101.setMHZ(jam_freq[2]);
+      _cc1101.SendData(ccsendingbuffer,60);
+  }
+    if(jam_freq[0] != jam_freq[3] && jam_freq[3] != 0){
+      _cc1101.setMHZ(jam_freq[3]);
+      _cc1101.SendData(ccsendingbuffer,60);
+  }
 }
 
 void _433PTT::getRSSIcc1101(float freqSet, float freqStep){
@@ -164,7 +177,6 @@ void _433PTT::getRSSIcc1101(float freqSet, float freqStep){
     freqSet += freqStep;
   }
 }
-
 bool _433PTT::RCSwitch_available(){
   return mySwitch.available();
 }
@@ -204,8 +216,3 @@ bool _433PTT::ELECHOUSE_CC1101_DRIVER_CheckReceiveFlag(){
 void _433PTT::ELECHOUSE_CC1101_SetRX(){
   _cc1101.SetRx();
 }
-
-
-
-
-

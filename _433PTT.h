@@ -85,7 +85,6 @@ class _433PTT
 public:
   _433PTT();
   void init();
-  void signalJamming();
   void receiveRF_RCSwitch();
   bool cc1101Config(float , uint8_t , float , float , float , float );
   void cc1101Config();
@@ -97,9 +96,7 @@ public:
   int getDriver();
   void changeDriver(_433PTT_DRIVER );
   ///////////////////////////////////////////////////
-  void signalJamming(float);
-  void signalJamming(float, float);
-  void signalJamming(float, float, float);
+  void signalJamming();
   //RCSWitch Variables:
   unsigned long RCSwitch_Received_Value;
   unsigned int RCSwitch_Received_Bitlength;
@@ -124,6 +121,9 @@ public:
   // buffer for hex to ascii conversions 
   byte textbuffer[BUF_LENGTH];
   //SCAN
+
+  //Jam
+  float jam_freq[4];
 
 private:
   ELECHOUSE_CC1101 _cc1101;
