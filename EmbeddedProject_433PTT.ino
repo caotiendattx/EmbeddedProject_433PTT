@@ -223,8 +223,24 @@ void setUpRoutes(){
 
 //  server.on("/on", HTTP_GET, handleGetView);
 
-  server.on("/scan", HTTP_GET, handleGetScanRSSI);
-
+//  server.on("/scan", HTTP_GET, handleGetScanRSSI);
+  server.on("/get/scan", HTTP_GET, [](AsyncWebServerRequest *request){
+      String onParam = request->arg("on");
+//      on = onParam.toInt() == 1;
+          tool.changeState(SCAN_STATE);
+      jsonBuffer.clear();
+      // create an empty array
+      JsonArray& rssiData = jsonBuffer.createArray();
+        for(uint8_t i = 0; i < (sizeof(tool.RSSIScanData)/sizeof(tool.RSSIScanData[0])); i++){
+            rssiData.add(tool.RSSIScanData[i]);
+          }
+      String response;
+      rssiData.printTo(response);
+      request->send(200, "application/json", response);
+//      // Simulate generating data based on the 'on' parameter
+//      String response = "{\"modulation\"😕"Modulation_" + String(on) + "\"}";
+//      request->send(200, "application/json", response);
+    });
   
 //  server.on("/postDataRF", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostBodySend);
 
