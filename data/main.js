@@ -133,26 +133,26 @@ function updateFormWithData(response) {
    // modulationOptions.value = data.modulation;
    // startFreqInput.value = data.startFrequency;
    // freqStepInput.value = data.step;
-   canvas = document.getElementById('graphCanvas');
-   ctx = canvas.getContext('2d');
+   let canvas = document.getElementById('graphCanvas');
+   let ctx = canvas.getContext('2d');
    console.log(response);
    let freqArrayString = response.freqArray;
    // data = JSON.parse(freqArrayString);
-   data = response.freqArray;
+   let data = response.freqArray;
    // data = data.map((item) => item * (-1));
    console.log('data: ', data);
-   barCount = data.length;
-   barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
+   let barCount = data.length;
+   let barWidth = canvas.width / (barCount * 2); // Increase the denominator for more spacing
    // maxValue = Math.max(...data);
-   maxValue = 0;
-   minValue - 128;
+   let maxValue = 0;
+   let minValue = -128;
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
    for (let i = 0; i < barCount; i++) {
       // barHeight = (data[i] / maxValue) * canvas.height;
-      barHeight = ((data[i] - minValue) / (maxValue - minValue)) * canvas.height;
-      x = i * (barWidth * 2); // Adjust the position based on barWidth
-      y = canvas.height - barHeight;
+      let barHeight = ((data[i] - minValue) / (maxValue - minValue)) * canvas.height;
+      let x = i * (barWidth * 2); // Adjust the position based on barWidth
+      let y = canvas.height - barHeight;
 
       ctx.fillStyle = 'blue';
       ctx.fillRect(x, y, barWidth, barHeight);
