@@ -90,6 +90,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const pre = parseInt(document.getElementById("pre").value);
       const pqt = parseInt(document.getElementById("pqt").value);
       const appendstatus = parseInt(document.getElementById("appendstatus").value);
+      const textarea = document.getElementById("myTextarea");
+      const textAreaValue = textarea.value;
 
       const jsonData = {
          modulation,
@@ -116,7 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
          fec,
          pre,
          pqt,
-         appendstatus
+         appendstatus,
+         textAreaValue
       };
       globalRFData = jsonData;
       //   console.log(jsonData); // You can replace this with your JSON handling logic
