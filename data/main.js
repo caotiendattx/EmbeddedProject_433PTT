@@ -208,9 +208,12 @@ JammingButton.addEventListener("click", function () {
    isJammingClick = 1 - isJammingClick;
    JammingButton.textContext = isJammingClick === 1 ? "STOP" : "START";
    const freqInputs = document.querySelectorAll(".jamming-col input[type='number']");
-   const frequencies = Array.from(freqInputs).map(input => parseInt(input.value));
+   const frequencies = Array.from(freqInputs).map(input => parseFloat(input.value));
    const requestData = {
-      jamming_freqs: frequencies
+      jamming_freq_1: frequencies[1],
+      jamming_freq_2: frequencies[2],
+      jamming_freq_3: frequencies[3],
+      jamming_freq_4: frequencies[4],
    };
    sendDataToServer(`/post/jamming?start=${isJammingClick}`, requestData);
 })
