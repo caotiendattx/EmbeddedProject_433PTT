@@ -90,8 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const pre = parseInt(document.getElementById("pre").value);
       const pqt = parseInt(document.getElementById("pqt").value);
       const appendstatus = parseInt(document.getElementById("appendstatus").value);
-      const textarea = document.getElementById("myTextarea");
-      const textAreaValue = textarea.value;
 
       const jsonData = {
          modulation,
@@ -118,8 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
          fec,
          pre,
          pqt,
-         appendstatus,
-         textAreaValue
+         appendstatus
       };
       globalRFData = jsonData;
       //   console.log(jsonData); // You can replace this with your JSON handling logic
@@ -209,8 +206,7 @@ let isJammingClick = 0;
 const JammingButton = document.getElementById('jammingButton');
 JammingButton.addEventListener("click", function () {
    isJammingClick = 1 - isJammingClick;
-   // JammingButton.textContent = JammingButton.textContent === "START" ? "STOP" : "START";
-   // JammingButton.textContext = isJammingClick === 1 ? "STOP" : "START";
+   JammingButton.textContext = isJammingClick === 1 ? "STOP" : "START";
    const freqInputs = document.querySelectorAll(".jamming-col input[type='number']");
    const frequencies = Array.from(freqInputs).map(input => parseFloat(input.value));
    const requestData = {

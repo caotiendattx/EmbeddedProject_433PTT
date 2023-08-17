@@ -85,6 +85,7 @@ class _433PTT
 public:
   _433PTT();
   void init();
+  void _433PTT_SetTx();
   void receiveRF_RCSwitch();
   bool cc1101Config(float , uint8_t , float , float , float , float );
   void cc1101Config();
@@ -123,12 +124,14 @@ public:
   //SCAN
 
   //Jam
-  float jam_freq[4];
 
+  //RX
+  char receiveData[200];
+  float jam_freq[4];
+    _433PTT_STATE _state;
 private:
   ELECHOUSE_CC1101 _cc1101;
   RCSwitch mySwitch;
-  _433PTT_STATE _state;
   _433PTT_DRIVER _driver;
 };
 

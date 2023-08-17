@@ -145,7 +145,14 @@ bool _433PTT::getConnectionStatus(){
       return 0;
     };
 }
-
+//void _433PTT::signalJamming(){
+//  randomSeed(analogRead(0));
+//  for (int i = 0; i<60; i++)
+//    {
+//        ccsendingbuffer[i] = (byte)random(255);
+//    };
+//  _cc1101.SendData(ccsendingbuffer,60);
+//}
 void _433PTT::signalJamming(){
   _cc1101.setMHZ(jam_freq[0]);
   randomSeed(analogRead(0));
@@ -167,7 +174,9 @@ void _433PTT::signalJamming(){
       _cc1101.SendData(ccsendingbuffer,60);
   }
 }
-
+  void _433PTT::_433PTT_SetTx(){
+    _cc1101.SetTx();
+  }
 void _433PTT::getRSSIcc1101(float freqSet, float freqStep){
   for(uint8_t i=0; i < 128; i++){
     _cc1101.setMHZ(freqSet);

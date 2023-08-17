@@ -7,6 +7,7 @@
 AsyncWebServer server(80);
 StaticJsonBuffer<2000> jsonBuffer;
 StaticJsonBuffer<2000> jsonBuffer2;
+bool on = true;
 String jsonString;
 _433PTT tool;
 void setupAPMode() {
@@ -36,10 +37,10 @@ void handlePostScanSubmit(AsyncWebServerRequest *request, uint8_t *data, size_t 
       tool._RFSpecs.scan_increasement = root["step"].as<float>();
       Serial.println(String(tool._RFSpecs.scan_increasement));
     }
-    request->send(200, "text/plain", "");
+    request->send(200, "application/json", "");
     tool.cc1101UpdateConfig();
   } else {
-    request->send(404, "text/plain", "");
+    request->send(404, "application/json", "");
   }
 }
 //  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN///////////////////  //SCAN/////////////////
@@ -160,10 +161,10 @@ void handlePostConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len,
       }
     }    
     
-    request->send(200, "text/plain", "");
+    request->send(200, "application/json", "");
     tool.cc1101UpdateConfig();
   } else {
-    request->send(404, "text/plain", "");
+    request->send(404, "application/json", "");
   }
 }
 //TX
@@ -173,55 +174,63 @@ void handleTXSendRF(AsyncWebServerRequest *request, uint8_t *data, size_t len, s
   if (root.success()) {
       tool.changeDriver(ELECHOUSE_CC1101_DRIVER);
       tool.cc1101UpdateConfig();
-    if (root.containsKey("freq1")) {
-      tool._RFSpecs.modulation = static_cast<_433PTT_MODULATIONS>(root["modulation"].as<int>()); 
-      Serial.println("Modulation: " + String(tool._RFSpecs.modulation));
+    if (root.containsKey("textAreaValue")) {
+      char arr[100];
+//      memcpy(arr, root["textAreaValue"].asString(); (root["textAreaValue"].asString()).length());
+      tool.ELECHOUSE_CC1101_DRIVER_TX(arr);
+      Serial.println("Send: ");
+      Serial.println(arr);
     }
-    request->send(200, "text/plain", "Send RF: OK");
+    request->send(200, "application/json", "");
   } else {
-    request->send(404, "text/plain", "Send RF: ERROR");
+    request->send(404, "application/json", "");
   }
 }
-void handleJamConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+bool start = false;
+void handlePostJaming(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
   DynamicJsonBuffer jsonDynamicBuffer;
+//  String onParam = request->arg("start");
+//  start = onParam.toInt() == 1;
+//  Serial.print(tool.getState());
+//  tool.changeState(JAMMING_STATE);  
+//  if(start == false){
+//    tool.changeState(IDLE_STATE);        
+//  }else{
+//      tool._state = JAMMING_STATE;
+//      tool.cc1101Config();
+//      tool._433PTT_SetTx();
+//  }
+  Serial.print(tool.getState());
   JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
   if (root.success()) {
       tool.changeDriver(ELECHOUSE_CC1101_DRIVER);
       tool.cc1101UpdateConfig();
-    if (root.containsKey("jamming-freq-1")) {
-        tool.jam_freq[0] = root["jamming-freq-1"].as<float>();
+    if (root.containsKey("jamming_freq_1")) {
+        tool.jam_freq[0] = root["jamming_freq_1"].as<float>();
     }
-    if (root.containsKey("jamming-freq-2")) {
-        tool.jam_freq[0] = root["jamming-freq-2"].as<float>();
+    if (root.containsKey("jamming_freq_2")) {
+        tool.jam_freq[1] = root["jamming_freq_2"].as<float>();
     }
-    if (root.containsKey("jamming-freq-3")) {
-        tool.jam_freq[0] = root["jamming-freq-3"].as<float>();
+    if (root.containsKey("jamming_freq_3")) {
+        tool.jam_freq[2] = root["jamming_freq_3"].as<float>();
     }
-    if (root.containsKey("jamming-freq-4")) {
-        tool.jam_freq[0] = root["jamming-freq-4"].as<float>();
+    if (root.containsKey("jamming_freq_4")) {
+        tool.jam_freq[3] = root["jamming_freq_4"].as<float>();
     }
-    request->send(200, "text/plain", "Send RF: OK");
+      tool._state = JAMMING_STATE;
+      tool.cc1101Config();
+      tool._433PTT_SetTx();
+    for(long i = 0; i < 100; i++){
+      Serial.println("Jamming1");
+      tool.signalJamming();
+      Serial.println("Jamming2");
+    }
+      tool.changeState(IDLE_STATE);
+    String response = "post data success";
+    request->send(200, "application/json",response);
+//    request->send(200, "application/json", "");
   } else {
-    request->send(404, "text/plain", "Send RF: ERROR");
-  }
-}
-void handleJamState(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-  DynamicJsonBuffer jsonDynamicBuffer;
-  JsonObject& root = jsonDynamicBuffer.parseObject((const char*)data);
-  if (root.success()) {
-      tool.changeDriver(ELECHOUSE_CC1101_DRIVER);
-      tool.cc1101UpdateConfig();
-    if (root.containsKey("state")) {
-      if(root["RFData"].as<bool>() == 1){
-          tool.changeState(JAMMING_STATE);
-      }
-      else{
-          tool.changeState(IDLE_STATE);
-      }
-    }
-    request->send(200, "text/plain", "Send RF: OK");
-  } else {
-    request->send(404, "text/plain", "Send RF: ERROR");
+    request->send(404, "application/json", "");
   }
 }
 void setUpRoutes(){
@@ -244,8 +253,11 @@ void setUpRoutes(){
 //  server.on("/on", HTTP_GET, handleGetView);
   server.on("/get/scan", HTTP_GET, [](AsyncWebServerRequest *request){
       String onParam = request->arg("on");
-//      on = onParam.toInt() == 1;
-      tool.changeState(SCAN_STATE);
+      on = onParam.toInt() == 1;
+      tool.changeState(SCAN_STATE);  
+      if(on == false){
+          tool.changeState(IDLE_STATE);        
+      }
       jsonBuffer.clear();
       jsonBuffer2.clear();
       JsonObject& object = jsonBuffer.createObject();
@@ -277,9 +289,8 @@ void setUpRoutes(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   server.on("/post/scan/submit", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostScanSubmit);
   server.on("/post/txrx/submit", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostConfig);
-  server.on("/post/txrx/sendrf", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handleTXSendRF);
-  server.on("/post/jam/config", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handleJamConfig);
-  server.on("/post/jam/state", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handleJamState);
+  server.on("/post/send/frequency", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handleTXSendRF);
+  server.on("/post/jamming", HTTP_POST, [](AsyncWebServerRequest *request){},NULL, handlePostJaming);
 
   server.begin();
 }
@@ -294,6 +305,8 @@ void setup() {
   };
   tool.init();
   tool.changeState(IDLE_STATE);
+
+
 }
 
 void handle_RX_State(){
@@ -304,6 +317,7 @@ void handle_RX_State(){
 
     if(tool.RCSwitch_available()){
       tool.receiveRF_RCSwitch();
+      
       //TODO: DATA TO FE
       // tool.RCSwitch_Received_Value
       // tool.RCSwitch_Received_Bitlength
@@ -338,7 +352,6 @@ void embedded_app(){
       tool.getRSSIcc1101(tool._RFSpecs.scan_start_Frequency, tool._RFSpecs.scan_increasement);
     break;
     case JAMMING_STATE:
-      tool.signalJamming();
     break;
     default:
     break;
